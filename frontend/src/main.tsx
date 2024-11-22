@@ -3,11 +3,14 @@ import { createRoot } from 'react-dom/client';
 import './index.css';
 import PlanProvider from './store/PlanProvider.tsx';
 import { Routes } from './Routes.tsx';
+import { AuthProvider } from './store/AuthProvider.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <PlanProvider>
-      <Routes />
-    </PlanProvider>
+    <AuthProvider>
+      <PlanProvider>
+        <Routes />
+      </PlanProvider>
+    </AuthProvider>
   </StrictMode>,
 );

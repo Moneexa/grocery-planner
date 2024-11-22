@@ -1,10 +1,17 @@
-import { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { useContext, useEffect, useState } from 'react';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { OdaMenu } from '../../shared-component/Menu';
 import { Layout, theme } from 'antd';
-
+import { AuthContext } from '../../store/AuthProvider';
 const { Content, Sider } = Layout;
 export function Dashboard() {
+  const { isLoggedIn } = useContext(AuthContext);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate('/');
+    }
+  }, [isLoggedIn]);
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer, borderRadiusLG },

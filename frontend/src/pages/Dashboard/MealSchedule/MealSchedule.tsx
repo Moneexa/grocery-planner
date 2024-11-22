@@ -1,26 +1,39 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, Button, Empty, Row, Col, Flex, FloatButton } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { Plan } from '../../../types';
+import { Plan, APIResponse } from '../../../types';
 import { Link, redirect } from 'react-router-dom';
-import { PlanContext } from '../../../store/PlanProvider';
+import axios from 'axios';
 
 export const MealSchedule: React.FC = () => {
   const { Meta } = Card;
-  const { plan } = useContext(PlanContext);
-
-  const plans: Plan[] = useMemo(() => {
-    return !plan.id ? [] : [plan];
+  const [plans, setPlans] = useState<APIResponse<Plan[]>>({
+    status: 'loading',
+  });
+  useEffect(() => {
+    axios
+      .get('/api/plans')
+      .then((response) => {
+        setPlans({
+          status: 'success',
+          data: response.data,
+        });
+      })
+      .catch((error) => {
+        setPlans({ status: 'error', msg: error.message });
+      });
   }, []);
 
   return (
     <div style={{ position: 'relative' }}>
-      {plans.length > 0 ? (
+      {plans.status === 'loading' && '...loading'}
+      {plans.status === 'error' && plans.msg}
+      {plans.status === 'success' && plans.data.length > 0 ? (
         <>
           <Row gutter={[16, 16]}>
-            {plans.map((_plan) => (
+            {plans.data.map((plan) => (
               <Col xs={24} sm={12} md={8} lg={6} key={plan.id}>
-                <Link to={`/app/meal-schedule/${_plan.id}`}>
+                <Link to={`/app/meal-schedule/${plan.id}`}>
                   <Card
                     hoverable
                     style={{ width: 240 }}
@@ -32,8 +45,8 @@ export const MealSchedule: React.FC = () => {
                     }
                   >
                     <Meta
-                      title={_plan.name}
-                      description={`${_plan.days} Days Plan`}
+                      title={plan.name}
+                      description={`${plan.days} Days Plan`}
                     />
                   </Card>
                 </Link>

@@ -38,3 +38,16 @@ export type GroceryPlan = {
   cost: number;
   groceries: GroceryItem[];
 };
+
+export type APIResponse<T> =
+  | {
+      status: 'loading';
+    }
+  | {
+      status: 'error';
+      msg: string;
+    }
+  | {
+      status: 'success';
+      data: T;
+    };
