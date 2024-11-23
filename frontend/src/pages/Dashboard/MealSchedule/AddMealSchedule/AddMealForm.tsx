@@ -1,64 +1,106 @@
-import { useContext, useMemo, useState } from 'react';
-import { Steps, Card, Button, Row, Col } from 'antd';
+import { useContext, useMemo, useRef, useState } from 'react';
+import { Steps, Card, Button, Row, Col, Input } from 'antd';
 import { CheckCircleOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import FoodGrid from './FoodCard/FoodGrid';
 import { PlanContext } from '../../../../store/PlanProvider';
-import { Link } from 'react-router-dom';
+import { APIResponse, Recipe } from '../../../../types';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { toSnakeCase } from '../../../../constants/caseConverter';
 
 const { Step } = Steps;
 
-interface MealPlanStepsProps {
-  days: number;
-}
+function AddMealPlanForm() {
+  const navigate = useNavigate();
+  const { plan } = useContext(PlanContext);
+  const { recipes } = plan;
 
-function AddMealPlanForm({ days }: MealPlanStepsProps) {
-  const {
-    plan: { startDate },
-  } = useContext(PlanContext);
-  const [current, setCurrent] = useState(0);
-  //   const [forms, setForms] = useState<Plan>({
-  //     id: '',
-  //     name: '',
-  //     image: '',
-  //     days: days,
-  //     startDate: Date.now(),
-  //     endDate: Date.now(),
-  //     recipes: [],
-  //   });
+  const [apiData, setApiData] = useState<APIResponse<string>>({
+    status: 'loading',
+  });
+  const [selectedRecipeDate, setSelectedRecipeDate] = useState(
+    recipes[0]?.date,
+  );
+  const [searchTerms, setSearchTerms] = useState<
+    Record<Exclude<keyof Recipe, 'date'>, string>
+  >({
+    frukost: '',
+    lunsj: '',
+    middag: '',
+  });
 
-  const handleSave = () => {
-    setCurrent((prev) => prev + 1);
+  const { selectedRecipe, isLastRecipe } = useMemo(() => {
+    const selectedRecipeIndex = recipes.findIndex(
+      (r) => r.date === selectedRecipeDate,
+    );
+    return {
+      selectedRecipe: recipes[selectedRecipeIndex],
+      isLastRecipe: selectedRecipeIndex === recipes.length - 1,
+    };
+  }, [recipes, selectedRecipeDate]);
+  const handleSearch2 = (
+    mealType: keyof typeof searchTerms,
+    searchTerm: string,
+  ) => {
+    setSearchTerms({ ...searchTerms, [mealType]: searchTerm });
   };
-  // Constructing the array from the length days to populate the UI
-  const steps = Array.from({ length: days + 1 }, (_, index) => ({
-    title: dayjs().add(index, 'day').format('MMM D, YYYY'),
-    status: () => {
-      if (index < current) return 'finish';
-      if (index === current) return 'process';
-      return 'wait';
-    },
-    id: index,
-  }));
 
-  const selectedStep = useMemo(() => {
-    return steps.find((step) => current === step.id);
-  }, [steps]);
+  const onSubmit = async () => {
+    const response = await axios.post('/api/plans/add/', plan);
+    if (response.data) {
+      setApiData({
+        status: 'success',
+        data: 'Your plan has been added',
+      });
+      navigate('/app/groceries/add');
+    }
+    setApiData({
+      status: 'error',
+      msg: 'There is some problem doing the request',
+    });
+  };
+
+  const handleNext = () => {
+    colRef.current?.scroll(0, 0);
+    const selectedRecipeIndex = recipes.findIndex(
+      (r) => r.date === selectedRecipeDate,
+    );
+    if (selectedRecipeIndex >= 0) {
+      setSelectedRecipeDate(recipes[selectedRecipeIndex + 1].date);
+    }
+  };
+
+  const colRef = useRef<HTMLDivElement | null>(null);
+
+  const getStatus = (recipe: Recipe) => {
+    if (recipe.date === selectedRecipe?.date) return 'process';
+    if (recipe.frukost && recipe.lunsj && recipe.middag) return 'finish';
+    return 'wait';
+  };
+
+  const nextDisabled = useMemo(() => {
+    return !(
+      selectedRecipe?.frukost &&
+      selectedRecipe?.lunsj &&
+      selectedRecipe?.middag
+    );
+  }, [selectedRecipe, recipes]);
 
   return (
-    <Card title="Meal Plans" style={{ marginTop: '24px' }}>
+    <Card title="Select your dishes for the meal plan" size="small">
       <Row>
-        <Col span={4}>
-          <Steps direction="vertical" current={current}>
-            {steps.map((item, index) => (
+        <Col span={6}>
+          <Steps direction="vertical" current={selectedRecipeDate} size="small">
+            {recipes.map((dailyRecipe) => (
               <Step
-                key={item.title}
-                title={item.title}
-                status={item.status()}
+                key={dailyRecipe.date}
+                title={dayjs(dailyRecipe.date).format('MMM D, YYYY')}
+                status={getStatus(dailyRecipe)}
                 icon={
-                  index < current ? (
+                  getStatus(dailyRecipe) === 'finish' ? (
                     <CheckCircleOutlined style={{ color: 'green' }} />
-                  ) : index === current ? (
+                  ) : getStatus(dailyRecipe) === 'process' ? (
                     <ClockCircleOutlined />
                   ) : undefined
                 }
@@ -67,41 +109,83 @@ function AddMealPlanForm({ days }: MealPlanStepsProps) {
           </Steps>
         </Col>
 
-        {selectedStep && (
-          <Col span={20}>
+        {selectedRecipe && (
+          <Col
+            span={18}
+            style={{ maxHeight: 'calc(100vh - 151px)', overflowY: 'auto' }}
+            ref={colRef}
+          >
             <div>
-              <h1>Frukost</h1>
+              <Row align="middle" justify="space-between">
+                <h1>Frukost</h1>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <Input.Search
+                    placeholder="Search Frukost"
+                    enterButton
+                    onSearch={(name) => {
+                      handleSearch2('frukost', name);
+                    }}
+                  />
+                </div>
+              </Row>
+
               <FoodGrid
                 category="frukost"
-                date={startDate + 24 * 60 * 60 * 1000 * (selectedStep.id + 1)}
+                date={selectedRecipeDate}
+                name={searchTerms.frukost}
               />
             </div>
+
             <div>
-              <h1>Lunsj</h1>
+              <Row align="middle" justify="space-between">
+                <h1>Lunsj</h1>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <Input.Search
+                    placeholder="Search Lunsj"
+                    enterButton
+                    onSearch={(name) => handleSearch2('lunsj', name)}
+                  />
+                </div>
+              </Row>
+
               <FoodGrid
                 category="lunsj"
-                date={startDate + 24 * 60 * 60 * 1000 * (selectedStep.id + 1)}
+                date={selectedRecipeDate}
+                name={searchTerms.lunsj}
               />
             </div>
+
             <div>
-              <h1>Middag</h1>
+              <Row align="middle" justify="space-between">
+                <h1>Middag</h1>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <Input.Search
+                    placeholder="Search Middag"
+                    enterButton
+                    onSearch={(name) => handleSearch2('middag', name)}
+                  />
+                </div>
+              </Row>
               <FoodGrid
                 category="middag"
-                date={startDate + 24 * 60 * 60 * 1000 * (selectedStep.id + 1)}
+                date={selectedRecipeDate}
+                name={searchTerms.middag}
               />
-            </div>
-            <div style={{ marginTop: '24px', textAlign: 'right' }}>
-              <Button type="primary" onClick={handleSave}>
-                Next
-              </Button>
             </div>
           </Col>
         )}
       </Row>
       <div style={{ marginTop: '24px', textAlign: 'right' }}>
-        <Link to="/app/groceries/add">
-          <Button type="primary">Save Meal Plan</Button>
-        </Link>
+        {!isLastRecipe && (
+          <Button type="primary" onClick={handleNext} disabled={nextDisabled}>
+            Next
+          </Button>
+        )}
+        {isLastRecipe && (
+          <Button type="primary" disabled={nextDisabled} onClick={onSubmit}>
+            Finish
+          </Button>
+        )}
       </div>
     </Card>
   );

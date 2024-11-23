@@ -2,32 +2,32 @@ import { useEffect, useState } from 'react';
 import { Card, Row, Col } from 'antd';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { APIResponse, Plan } from '../../../../types';
+import { APIResponse, Recipe } from '../../../../types';
 
 export default function PlanFoodGrid() {
   const { planId } = useParams();
-  const [plan, setPlan] = useState<APIResponse<Plan>>({
+  const [recipes, setRecipes] = useState<APIResponse<Recipe[]>>({
     status: 'loading',
   });
   useEffect(() => {
     axios
-      .get(`/api/plans/${planId}`)
+      .get<Recipe[]>(`/api/plans/${planId}`)
       .then((response) => {
-        setPlan({ status: 'success', data: response.data });
+        setRecipes({ status: 'success', data: response.data });
       })
       .catch((error) => {
-        setPlan({ status: 'error', msg: error });
+        setRecipes({ status: 'error', msg: error });
       });
   }, []);
 
   return (
     <>
-      {plan.status === 'loading' && '...loading'}
-      {plan.status === 'error' && plan.msg}
-      {plan.status === 'success' && (
+      {recipes.status === 'loading' && '...loading'}
+      {recipes.status === 'error' && recipes.msg}
+      {recipes.status === 'success' && (
         <>
-          <h1>Your Meal Schedule by the days of Plan {planId}</h1>
-          {plan.data.recipes.map((recipe, index) => (
+          <h1>Your Meal Schedule by the days of Plan</h1>
+          {recipes.data.map((recipe, index) => (
             <>
               <h2>Day{index + 1}</h2>
               <Row gutter={[16, 16]}>

@@ -2,12 +2,11 @@ import { useState, createContext } from 'react';
 import { Food, GroceryItem, GroceryPlan, Plan, Recipe } from '../types';
 
 const defaultPlan: Plan = {
-  id: '',
   days: 0,
   startDate: Date.now(),
   endDate: Date.now(),
   name: '',
-  image: '',
+  dietaryPreference: [],
   recipes: [],
 };
 const groceryPlan: GroceryPlan = {

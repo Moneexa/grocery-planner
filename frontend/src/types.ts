@@ -24,13 +24,13 @@ export type Recipe = {
 };
 
 export type Plan = {
-  id: string;
+  id?: string;
   days: number;
   startDate: number;
   endDate: number;
   name: string;
-  image: string;
   recipes: Recipe[];
+  dietaryPreference: string[];
 };
 
 export type GroceryPlan = {

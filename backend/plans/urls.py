@@ -3,7 +3,7 @@ from . import views
 
 urlpatterns=[
     path('', views.getData),
-    path('<int:plan_id>/', views.get_specific_plan),
+    path('<uuid:plan_id>/', views.get_plan_recipes),
 
     path('add/', views.postData )
 ]

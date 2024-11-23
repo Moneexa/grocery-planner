@@ -1,6 +1,6 @@
 import { Card } from 'antd';
 import { Food, Recipe } from '../../../../../types';
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 import { PlanContext } from '../../../../../store/PlanProvider';
 
 const { Meta } = Card;
@@ -14,16 +14,20 @@ function FoodCard({
   category: Exclude<keyof Recipe, 'date'>;
   date: number;
 }) {
-  const { addFood } = useContext(PlanContext);
-
+  const { plan, addFood } = useContext(PlanContext);
+  const isSelected = useMemo(() => {
+    const recipe = plan.recipes.find((recipe) => recipe.date === date);
+    if (!recipe) return false;
+    return recipe[category]?.id === food.id;
+  }, [plan, category, date]);
   return (
     <Card
       hoverable
-      style={{ width: '150px' }}
+      style={{ width: '150px', background: isSelected ? '#3aafdc' : 'none' }}
       cover={<img alt="example" src={food.imageUrl} />}
       onClick={() => addFood(food, date, category)}
     >
-      <Meta title={food.id} description={food.timeTaken} />
+      <Meta title={food.name} description={food.timeTaken} />
     </Card>
   );
 }
