@@ -54,11 +54,8 @@ function PlanProvider({ children }: { children: React.ReactNode }) {
     } else {
       const planCloned = structuredClone(plan);
       planCloned['recipes'][selectedRecipeIndex][cat] = food;
-      console.log(planCloned.recipes[selectedRecipeIndex]?.[cat]?.id);
       setPlan(planCloned);
     }
-
-    console.log(plan);
   };
 
   const addGrocery = (groceryItem: GroceryItem) => {

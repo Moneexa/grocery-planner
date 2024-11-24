@@ -8,8 +8,6 @@ const IngredientBarChart = ({
 }) => {
   const labels = data.map((item) => item.ingredient); // Ingredient names
   const counts = data.map((item) => item.price); // Ingredient counts
-  console.log(labels);
-  console.log(counts);
 
   const chartData = {
     labels,

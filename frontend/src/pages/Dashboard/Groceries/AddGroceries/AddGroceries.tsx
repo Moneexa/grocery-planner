@@ -1,46 +1,31 @@
 import { Button, Card, Col, Row, Steps } from 'antd';
-import { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { CheckCircleOutlined, ClockCircleOutlined } from '@ant-design/icons';
-import GroceryGrid from '../IndividualGrocery/GroceryGrid';
+import GroceryGrid from './GroceryGrid';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { Plan } from '../../../../types';
 import { fetchPlans } from '../../../../shared-component/shared-apis';
+import { usePromise } from '../../../../shared-component/hooks';
 
 export default function AddGroceries() {
   const navigate = useNavigate();
   const { Step } = Steps;
 
-  const [plan, setPlan] = useState<Plan>({
-    name: '',
-    days: 0,
-    dietaryPreference: [],
-    endDate: 0,
-    recipes: [],
-    startDate: 0,
-  });
-  //fetch plan
-  useEffect(() => {
-    async function abc() {
-      const activePlan = await fetchPlans();
-      setPlan(activePlan);
-    }
-    abc();
-  }, []);
+  const plan = usePromise(fetchPlans);
   const ingredients = useMemo(() => {
-    const ings = new Set<string>();
-    plan?.recipes?.forEach((recipe: any) => {
+    if (plan.status !== 'success') return [];
+    const ingredients = new Set<string>();
+    plan.data.recipes.forEach((recipe) => {
       recipe['frukost']?.ingredients?.forEach((mealType: string) => {
-        ings.add(mealType);
+        ingredients.add(mealType);
       });
       recipe['lunsj']?.ingredients?.forEach((mealType: string) => {
-        ings.add(mealType);
+        ingredients.add(mealType);
       });
       recipe['middag']?.ingredients?.forEach((mealType: string) => {
-        ings.add(mealType);
+        ingredients.add(mealType);
       });
     });
-    return Array.from(ings);
+    return Array.from(ingredients);
   }, [plan]);
 
   const [currentGrocerySelection, setCurrentGrocerySelection] = useState(0);

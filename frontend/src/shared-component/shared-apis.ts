@@ -2,11 +2,8 @@ import axios from 'axios';
 import { ExistingPlan, Food, GroceryItem, Recipe } from '../types';
 
 export async function fetchPlans() {
-  const response = await axios.get('/api/plans/today');
-  if (response) {
-    const plan = response.data;
-    return plan;
-  }
+  const response = await axios.get<ExistingPlan>('/api/plans/today');
+  return response.data;
 }
 
 export async function fetchGroceries() {

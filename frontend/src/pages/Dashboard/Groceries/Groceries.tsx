@@ -1,43 +1,26 @@
-import { useEffect, useState, useContext } from 'react';
-import { Button, Card, Col, Empty, Flex, Row } from 'antd';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, useContext } from 'react';
+import { Button, Card, Col, Empty, Flex, Row, Typography } from 'antd';
+import { Link } from 'react-router-dom';
 import { CheckOutlined, PlusOutlined } from '@ant-design/icons';
-import { Plan } from '../../../types';
 import { PlanContext } from '../../../store/PlanProvider';
 
 import { fetchPlans } from '../../../shared-component/shared-apis';
 import axios from 'axios';
+import { usePromise } from '../../../shared-component/hooks';
 
 const { Meta } = Card;
 export default function Groceries() {
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const { grocery } = useContext(PlanContext);
-  const [plan, setPlan] = useState<Plan>({
-    name: '',
-    days: 0,
-    dietaryPreference: [],
-    endDate: 0,
-    recipes: [],
-    startDate: 0,
-  });
-
-  useEffect(() => {
-    async function abc() {
-      const activePlan = await fetchPlans();
-      setPlan(activePlan);
-    }
-    abc();
-  }, []);
-
+  const plan = usePromise(fetchPlans);
   const handleCheckOut = async () => {
+    if (plan.status !== 'success') return;
     setLoading(true);
 
     const payload = {
       ...grocery,
-      planId: plan.id,
+      planId: plan.data.id,
     };
-    console.log(payload);
     const response = await axios.post('/api/grocery-plan/add/', payload);
     if (response) {
       setLoading(false);
@@ -57,8 +40,32 @@ export default function Groceries() {
               <Col xs={24} sm={12} md={8} lg={6} key={index}>
                 <Card
                   hoverable
-                  style={{ width: 240 }}
-                  cover={<img alt="example" src={item.imageUrl} />}
+                  cover={
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        height: '200px',
+                        width: '150px',
+                        padding: '10px',
+                        backgroundImage: `url('${item.imageUrl}')`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundClip: 'content-box',
+                      }}
+                    >
+                      {/* <img
+                        alt="example"
+                        src={item.imageUrl}
+                        style={{
+                          height: '100%',
+                          width: 'auto',
+                          maxWidth: '100%',
+                        }}
+                      /> */}
+                    </div>
+                  }
                 >
                   <Meta
                     title={item.name}
@@ -67,26 +74,29 @@ export default function Groceries() {
                 </Card>
               </Col>
             ))}
-            <Col span={12}>
-              <Flex
-                vertical
-                justify="flex-end"
-                align="end"
-                style={{ height: '100%' }}
-              >
-                <h3>Total Price:{grocery.cost} nok</h3>
-                <h3>Total Items:{grocery.groceries.length}kg</h3>
-                <Button
-                  type="primary"
-                  icon={<CheckOutlined />}
-                  loading={loading}
-                  onClick={handleCheckOut}
-                >
-                  Checkout
-                </Button>
-              </Flex>
-            </Col>
           </Row>
+          <Flex
+            vertical
+            justify="flex-end"
+            align="end"
+            gap={10}
+            style={{ width: '100%', paddingRight: '2rem' }}
+          >
+            <Typography.Title level={4} style={{ margin: 0 }}>
+              Total Price:{grocery.cost} nok
+            </Typography.Title>
+            <Typography.Title level={4} style={{ margin: 0 }}>
+              Total Items:{grocery.groceries.length}kg
+            </Typography.Title>
+            <Button
+              type="primary"
+              icon={<CheckOutlined />}
+              loading={loading}
+              onClick={handleCheckOut}
+            >
+              Checkout
+            </Button>
+          </Flex>
         </Flex>
       ) : (
         <Flex align="center" justify="center" vertical gap={10}>
