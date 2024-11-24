@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { Button, Card, Col, Empty, Flex, Row, Typography } from 'antd';
+import { Button, Card, Empty, Flex, Typography } from 'antd';
 import { Link } from 'react-router-dom';
 import { CheckOutlined, PlusOutlined } from '@ant-design/icons';
 import { PlanContext } from '../../../store/PlanProvider';
@@ -35,27 +35,32 @@ export default function Groceries() {
       {grocery.groceries.length > 0 ? (
         <Flex vertical gap={10} align="center" justify="center">
           <h1>Grocery Added for the Plan</h1>
-          <Row gutter={[16, 16]}>
-            {grocery.groceries.map((item, index) => (
-              <Col xs={24} sm={12} md={8} lg={6} key={index}>
-                <Card
-                  hoverable
-                  cover={
-                    <div
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        height: '200px',
-                        width: '150px',
-                        padding: '10px',
-                        backgroundImage: `url('${item.imageUrl}')`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                        backgroundRepeat: 'no-repeat',
-                        backgroundClip: 'content-box',
-                      }}
-                    >
-                      {/* <img
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+              gap: '16px',
+              width: '100%',
+            }}
+          >
+            {grocery.groceries.map((item) => (
+              <Card
+                hoverable
+                cover={
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      height: '200px',
+                      padding: '10px',
+                      backgroundImage: `url('${item.imageUrl}')`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      backgroundRepeat: 'no-repeat',
+                      backgroundClip: 'content-box',
+                    }}
+                  >
+                    {/* <img
                         alt="example"
                         src={item.imageUrl}
                         style={{
@@ -64,17 +69,16 @@ export default function Groceries() {
                           maxWidth: '100%',
                         }}
                       /> */}
-                    </div>
-                  }
-                >
-                  <Meta
-                    title={item.name}
-                    description={`${item.price} nok with ${item.weight}kg`}
-                  />
-                </Card>
-              </Col>
+                  </div>
+                }
+              >
+                <Meta
+                  title={item.name}
+                  description={`${item.price} nok with ${item.weight}kg`}
+                />
+              </Card>
             ))}
-          </Row>
+          </div>
           <Flex
             vertical
             justify="flex-end"

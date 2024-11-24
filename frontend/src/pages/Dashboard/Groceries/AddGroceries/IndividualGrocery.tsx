@@ -44,7 +44,6 @@ function GroceryCard({
         ></div>
       }
       onClick={() => {
-        debugger;
         addGrocery({
           id: itemId,
           name: itemName,
