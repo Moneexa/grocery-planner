@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
-import { OdaMenu } from '../../shared-component/Menu';
+import { OdaMenu } from '../../shared/Menu';
 import { Layout } from 'antd';
 import { AuthContext } from '../../store/AuthProvider';
 const { Content, Sider } = Layout;
@@ -11,7 +11,7 @@ export function Dashboard() {
     if (!isLoggedIn) {
       navigate('/');
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn, navigate]);
   const [collapsed, setCollapsed] = useState(false);
 
   return (

@@ -19,7 +19,7 @@ function FoodCard({
     const recipe = plan.recipes.find((recipe) => recipe.date === date);
     if (!recipe) return false;
     return recipe[category]?.id === food.id;
-  }, [plan, category, date]);
+  }, [plan.recipes, category, food.id, date]);
   return (
     <Card
       hoverable

@@ -2,8 +2,8 @@ import { Card, Col, Row } from 'antd';
 import TodayFood from './TodayFood/TodayFood';
 import IngredientBarChart from './IngredientCost/IngredientCost';
 import PlanCostLineChart from './HistoricalCos/HistoricalCost';
-import { usePromise } from '../../../shared-component/hooks';
-import { getInsights } from '../../../shared-component/shared-apis';
+import { usePromise } from '../../../shared/hooks';
+import { getInsights } from '../../../shared/apis';
 
 export function Analytics() {
   const response = usePromise(getInsights);

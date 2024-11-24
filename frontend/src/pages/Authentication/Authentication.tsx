@@ -29,11 +29,11 @@ export default function Authentication() {
     if (isLoggedIn) {
       navigate('/app');
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn, navigate]);
 
   const startSignIn = () => {
     signInWithPopup(auth, provider)
-      .then((result: any) => {
+      .then((result) => {
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential?.accessToken;
         localStorage.setItem(
@@ -52,7 +52,7 @@ export default function Authentication() {
       .then(() => {
         return setIsLoggedIn(true);
       })
-      .catch((error: { code: any; message: any }) => {
+      .catch((error: { code: number | string; message: string }) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         alert(`Code: ${errorCode} \nmessage: ${errorMessage}`);
@@ -71,7 +71,6 @@ export default function Authentication() {
           SignIn with Google
         </Button>
       </Flex>
-          
     </>
   );
 }

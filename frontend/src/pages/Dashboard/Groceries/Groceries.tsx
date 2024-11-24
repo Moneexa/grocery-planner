@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 import { CheckOutlined, PlusOutlined } from '@ant-design/icons';
 import { PlanContext } from '../../../store/PlanProvider';
 
-import { fetchPlans } from '../../../shared-component/shared-apis';
+import { fetchPlans } from '../../../shared/apis';
 import axios from 'axios';
-import { usePromise } from '../../../shared-component/hooks';
+import { usePromise } from '../../../shared/hooks';
 
 const { Meta } = Card;
 export default function Groceries() {

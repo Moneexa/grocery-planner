@@ -1,10 +1,16 @@
 import { createContext, useState } from 'react';
 
-const defaultAuth = {
-  isLoggedIn: false,
-  setIsLoggedIn: (_payload: boolean) => {},
+type Auth = {
+  isLoggedIn: boolean;
+  setIsLoggedIn: (isLoggedIn: boolean) => void;
 };
 
+const defaultAuth: Auth = {
+  isLoggedIn: false,
+  setIsLoggedIn: () => {},
+};
+
+// eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext(defaultAuth);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {

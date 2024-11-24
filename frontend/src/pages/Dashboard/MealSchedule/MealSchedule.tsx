@@ -2,8 +2,8 @@ import React from 'react';
 import { Card, Button, Empty, Row, Col, Flex, FloatButton } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { Link, redirect } from 'react-router-dom';
-import { usePromise } from '../../../shared-component/hooks';
-import { listPlans } from '../../../shared-component/shared-apis';
+import { usePromise } from '../../../shared/hooks';
+import { listPlans } from '../../../shared/apis';
 
 export const MealSchedule: React.FC = () => {
   const { Meta } = Card;

@@ -1,6 +1,6 @@
 import GroceryCard from './IndividualGrocery';
-import { usePromise } from '../../../../shared-component/hooks';
-import { listGroceries } from '../../../../shared-component/shared-apis';
+import { usePromise } from '../../../../shared/hooks';
+import { listGroceries } from '../../../../shared/apis';
 
 export default function GroceryGrid({
   groceryIngredient,

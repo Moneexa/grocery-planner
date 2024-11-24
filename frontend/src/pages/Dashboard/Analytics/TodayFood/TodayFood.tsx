@@ -1,6 +1,6 @@
 import { Card, Col, Row } from 'antd';
-import { fetchPlans } from '../../../../shared-component/shared-apis';
-import { usePromise } from '../../../../shared-component/hooks';
+import { fetchPlans } from '../../../../shared/apis';
+import { usePromise } from '../../../../shared/hooks';
 
 export default function TodayFood({ today }: { today: boolean }) {
   const plan = usePromise(fetchPlans);

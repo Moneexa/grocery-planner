@@ -9,26 +9,40 @@ const defaultPlan: Plan = {
   dietaryPreference: [],
   recipes: [],
 };
-const groceryPlan: GroceryPlan = {
+const defaultGroceryPlan: GroceryPlan = {
   cost: 0,
   groceries: [],
   planId: '0',
 };
-export const PlanContext = createContext({
-  plan: defaultPlan,
-  grocery: groceryPlan,
-  changePlan: (_: Plan) => {},
+const noop = () => {};
+
+type Actions = {
   addFood: (
-    _food: Food,
-    _date: number,
-    _category: Exclude<keyof Recipe, 'date'>,
-  ) => {},
-  addGrocery: (_groceryItem: GroceryItem) => {},
+    food: Food,
+    date: number,
+    category: Exclude<keyof Recipe, 'date'>,
+  ) => void;
+  changePlan: (plan: Plan) => void;
+  addGrocery: (groceryItem: GroceryItem) => void;
+};
+
+type PlanStore = {
+  plan: Plan;
+  grocery: GroceryPlan;
+} & Actions;
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const PlanContext = createContext<PlanStore>({
+  plan: defaultPlan,
+  grocery: defaultGroceryPlan,
+  addFood: noop,
+  changePlan: noop,
+  addGrocery: noop,
 });
 
 function PlanProvider({ children }: { children: React.ReactNode }) {
   const [plan, setPlan] = useState(defaultPlan);
-  const [grocery, setGrocery] = useState(groceryPlan);
+  const [grocery, setGrocery] = useState(defaultGroceryPlan);
 
   const changePlan = (payload: Plan) => setPlan(payload);
 

@@ -3,8 +3,8 @@ import { useMemo, useRef, useState } from 'react';
 import { CheckCircleOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import GroceryGrid from './GroceryGrid';
 import { useNavigate } from 'react-router-dom';
-import { fetchPlans } from '../../../../shared-component/shared-apis';
-import { usePromise } from '../../../../shared-component/hooks';
+import { fetchPlans } from '../../../../shared/apis';
+import { usePromise } from '../../../../shared/hooks';
 
 export default function AddGroceries() {
   const navigate = useNavigate();
@@ -63,7 +63,7 @@ export default function AddGroceries() {
   //get current step
   const selectedGrocery = useMemo(() => {
     return steps[currentGrocerySelection];
-  }, [ingredients, currentGrocerySelection]);
+  }, [steps, currentGrocerySelection]);
   const colRef = useRef<HTMLDivElement | null>(null);
 
   return (

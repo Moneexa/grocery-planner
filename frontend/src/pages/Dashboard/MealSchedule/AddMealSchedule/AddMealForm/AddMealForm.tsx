@@ -84,7 +84,7 @@ function AddMealPlanForm() {
       selectedRecipe?.lunsj &&
       selectedRecipe?.middag
     );
-  }, [selectedRecipe, recipes]);
+  }, [selectedRecipe]);
 
   return (
     <Card title="Select your dishes for the meal plan" size="small">

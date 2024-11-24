@@ -33,6 +33,7 @@ export function usePromise<T>(
     return () => {
       isMounted = false; // Cleanup function
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 
   return results;

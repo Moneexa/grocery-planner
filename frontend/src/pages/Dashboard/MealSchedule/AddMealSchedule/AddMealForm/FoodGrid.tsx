@@ -4,8 +4,8 @@ import { Recipe } from '../../../../../types';
 import { useContext } from 'react';
 import { PlanContext } from '../../../../../store/PlanProvider';
 
-import { usePromise } from '../../../../../shared-component/hooks';
-import { searchMeals } from '../../../../../shared-component/shared-apis';
+import { usePromise } from '../../../../../shared/hooks';
+import { searchMeals } from '../../../../../shared/apis';
 
 export default function FoodGrid({
   name,

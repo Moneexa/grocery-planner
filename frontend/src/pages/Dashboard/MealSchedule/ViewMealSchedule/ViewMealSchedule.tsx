@@ -1,7 +1,7 @@
 import { Card, Row, Col, Image } from 'antd';
 import { useParams } from 'react-router-dom';
-import { usePromise } from '../../../../shared-component/hooks';
-import { listPlanRecipes } from '../../../../shared-component/shared-apis';
+import { usePromise } from '../../../../shared/hooks';
+import { listPlanRecipes } from '../../../../shared/apis';
 
 export default function PlanFoodGrid() {
   const { planId } = useParams();
