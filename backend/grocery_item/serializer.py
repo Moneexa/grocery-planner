@@ -1,0 +1,8 @@
+from rest_framework import serializers
+from base.models import GroceryItem
+
+
+class GroceryItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=GroceryItem
+        fields='__all__'

@@ -1,8 +1,7 @@
 import { Col, Row } from 'antd';
-import { recipes } from '../../../../../constants/recipes';
 import FoodCard from './FoodCard';
 import { APIResponse, Food, Recipe } from '../../../../../types';
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { PlanContext } from '../../../../../store/PlanProvider';
 import axios from 'axios';
 

@@ -21,5 +21,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/plans/',include('plans.urls')),
     path('api/user/', include('user.urls')),
-    path('api/recipe/', include('recipe.urls'))
+    path('api/recipe/', include('recipe.urls')),
+    path('api/grocery-plan/', include('groceries.urls')),
+    path('api/grocery-items/', include('grocery_item.urls')),
+    path('api/insights/', include('aggregation.urls')),
+
 ]

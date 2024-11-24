@@ -54,7 +54,7 @@ function PlanProvider({ children }: { children: React.ReactNode }) {
     } else {
       const planCloned = structuredClone(plan);
       planCloned['recipes'][selectedRecipeIndex][cat] = food;
-
+      console.log(planCloned.recipes[selectedRecipeIndex]?.[cat]?.id);
       setPlan(planCloned);
     }
 
@@ -62,9 +62,16 @@ function PlanProvider({ children }: { children: React.ReactNode }) {
   };
 
   const addGrocery = (groceryItem: GroceryItem) => {
-    const groc = grocery;
+    const groc = structuredClone(grocery);
+    if (groc.groceries.some((grocery) => grocery.id === groceryItem.id)) {
+      setGrocery({
+        ...groc,
+        groceries: groc.groceries.filter((g) => g.id !== groceryItem.id),
+      });
+      return;
+    }
     groc['planId'] = plan.id;
-    groc.groceries.push(groceryItem);
+    groc['groceries'].push(groceryItem);
     const cost: number = groc.groceries.reduce(
       (acc, next) => acc + Number(next.price),
       0,

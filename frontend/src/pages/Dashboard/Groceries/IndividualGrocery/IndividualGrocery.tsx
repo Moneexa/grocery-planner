@@ -1,5 +1,5 @@
 import { Card } from 'antd';
-import { useContext } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { PlanContext } from '../../../../store/PlanProvider';
 
 const { Meta } = Card;
@@ -17,21 +17,28 @@ function GroceryCard({
   itemWeight: string;
   itemUrl: string;
 }) {
-  const { addGrocery } = useContext(PlanContext);
+  const { addGrocery, grocery } = useContext(PlanContext);
+  const isSelected = useMemo(() => {
+    const groceryItems = grocery.groceries.find((item) => item.id === itemId);
+    if (!groceryItems) return false;
+    return true;
+  }, [itemId, grocery]);
+
   return (
     <Card
       hoverable
-      style={{ width: '150px' }}
+      style={{ width: '150px', background: isSelected ? '#3aafdc' : 'none' }}
       cover={<img alt="example" src={itemUrl} />}
-      onClick={() =>
+      onClick={() => {
+        debugger;
         addGrocery({
           id: itemId,
           name: itemName,
           imageUrl: itemUrl,
           price: itemPrice,
           weight: itemWeight,
-        })
-      }
+        });
+      }}
     >
       <Meta
         title={itemName}

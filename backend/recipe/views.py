@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from .food_format import convert_to_food_format
+from .formatter import convert_to_food_format
 from .meal_data import fetch_frukost_data,fetch_lunsj_data,fetch_middag_data
 
 def get_data(request):

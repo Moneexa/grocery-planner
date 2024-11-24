@@ -43,7 +43,7 @@ export default function PlanFoodGrid() {
                     }
                   >
                     <Card.Meta
-                      title={recipe.frukost?.id}
+                      title={recipe.frukost?.name}
                       description={recipe.frukost?.timeTaken}
                     />
                   </Card>
@@ -60,7 +60,7 @@ export default function PlanFoodGrid() {
                     }
                   >
                     <Card.Meta
-                      title={recipe.lunsj?.id}
+                      title={recipe.lunsj?.name}
                       description={recipe.lunsj?.timeTaken}
                     />
                   </Card>
@@ -77,7 +77,7 @@ export default function PlanFoodGrid() {
                     }
                   >
                     <Card.Meta
-                      title={recipe.middag?.id}
+                      title={recipe.middag?.name}
                       description={recipe.middag?.timeTaken}
                     />
                   </Card>

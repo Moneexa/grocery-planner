@@ -1,34 +1,45 @@
 import { Card, Col, Row } from 'antd';
+import TodayFood from './TodayFood/TodayFood';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import IngredientBarChart from './IngredientCost/IngredientCost';
+import PlanCostLineChart from './HistoricalCos/HistoricalCost';
 
 export function Analytics() {
+  const [barChartData, setBarChartData] = useState<
+    { ingredient: string; price: string }[]
+  >([]);
+  const [lineChartData, setLineChartData] = useState([]);
+  useEffect(() => {
+    axios
+      .get('/api/insights/')
+      .then((response) => {
+        setBarChartData(response.data.barChartData);
+        setLineChartData(response.data.lineChartData);
+      })
+      .catch((error) => console.error('Error fetching plan data:', error));
+  }, []);
+
   return (
     <>
       <Row justify="center" gutter={[10, 10]}>
         <Col span={12}>
-          <Card title="Today's Food" bordered={true}>
-            Card content
-          </Card>
+          <TodayFood today />
         </Col>
         <Col span={12}>
-          <Card title="Cost of your current plan per day" bordered={true}>
-            Card content
+          <TodayFood today={false} />
+        </Col>
+        <Col span={12}>
+          <Card
+            title="Cost of ingredients distribution in the plan"
+            bordered={true}
+          >
+            <IngredientBarChart data={barChartData} />
           </Card>
         </Col>
         <Col span={12}>
           <Card title="Historical Plan Cost" bordered={true}>
-            Card content
-          </Card>
-        </Col>
-        <Col span={12}>
-          <Card title="Most Food Consumed" bordered={true}>
-            Card content
-          </Card>
-        </Col>
-        <Col span={12}>
-          <Card title="Your Remaining Food By Category">
-            <Col span={8}></Col>
-            <Col span={8}></Col>
-            <Col span={8}></Col>
+            <PlanCostLineChart data={lineChartData} />
           </Card>
         </Col>
       </Row>

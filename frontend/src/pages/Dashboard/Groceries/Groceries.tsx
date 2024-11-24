@@ -1,11 +1,52 @@
-import { useContext } from 'react';
-import { PlanContext } from '../../../store/PlanProvider';
+import { useEffect, useState, useContext } from 'react';
 import { Button, Card, Col, Empty, Flex, Row } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { CheckOutlined, PlusOutlined } from '@ant-design/icons';
+import { Plan } from '../../../types';
+import { PlanContext } from '../../../store/PlanProvider';
+
+import { fetchPlans } from '../../../shared-component/shared-apis';
+import axios from 'axios';
+
 const { Meta } = Card;
 export default function Groceries() {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const { grocery } = useContext(PlanContext);
+  const [plan, setPlan] = useState<Plan>({
+    name: '',
+    days: 0,
+    dietaryPreference: [],
+    endDate: 0,
+    recipes: [],
+    startDate: 0,
+  });
+
+  useEffect(() => {
+    async function abc() {
+      const activePlan = await fetchPlans();
+      setPlan(activePlan);
+    }
+    abc();
+  }, []);
+
+  const handleCheckOut = async () => {
+    setLoading(true);
+
+    const payload = {
+      ...grocery,
+      planId: plan.id,
+    };
+    console.log(payload);
+    const response = await axios.post('/api/grocery-plan/add/', payload);
+    if (response) {
+      setLoading(false);
+    } else {
+      setLoading(false);
+
+      alert('there is a problem adding groceries');
+    }
+  };
   return (
     <>
       {grocery.groceries.length > 0 ? (
@@ -17,12 +58,7 @@ export default function Groceries() {
                 <Card
                   hoverable
                   style={{ width: 240 }}
-                  cover={
-                    <img
-                      alt="example"
-                      src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
-                    />
-                  }
+                  cover={<img alt="example" src={item.imageUrl} />}
                 >
                   <Meta
                     title={item.name}
@@ -40,7 +76,12 @@ export default function Groceries() {
               >
                 <h3>Total Price:{grocery.cost} nok</h3>
                 <h3>Total Items:{grocery.groceries.length}kg</h3>
-                <Button type="primary" icon={<CheckOutlined />}>
+                <Button
+                  type="primary"
+                  icon={<CheckOutlined />}
+                  loading={loading}
+                  onClick={handleCheckOut}
+                >
                   Checkout
                 </Button>
               </Flex>

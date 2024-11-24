@@ -1,41 +1,44 @@
 import { Col, Row } from 'antd';
-import { GroceryItem } from '../../../../types';
-import { useMemo } from 'react';
+import { APIResponse, GroceryItem } from '../../../../types';
+import { useEffect, useMemo, useState } from 'react';
 import GroceryCard from './IndividualGrocery';
+import axios from 'axios';
 
 export default function GroceryGrid({
   groceryIngredient,
 }: {
   groceryIngredient: string;
 }) {
-  const groceryList: GroceryItem[] = useMemo(() => {
-    const listGroceries: GroceryItem[] = [];
-    for (let i = 1; i < 5; i++) {
-      listGroceries.push({
-        id: `${i}`,
-        name: `${groceryIngredient}${i}`,
-        price: `${i * 11}`,
-        weight: `${i * 11}`,
-        imageUrl: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png',
-      });
-    }
-    return listGroceries;
+  const [groceries, setGroceries] = useState<APIResponse<GroceryItem[]>>({
+    status: 'loading',
+  });
+  useEffect(() => {
+    axios
+      .get(`/api/grocery-items?name=${groceryIngredient}`)
+      .then((response) => {
+        setGroceries({ status: 'success', data: response.data });
+      })
+      .catch((error) => setGroceries({ status: 'error', msg: error }));
   }, [groceryIngredient]);
   return (
     <Row gutter={16}>
-      {groceryList.map((groc) => {
-        return (
-          <Col>
-            <GroceryCard
-              itemId={groc.id}
-              itemName={groc.name}
-              itemWeight={groc.weight}
-              itemPrice={groc.price}
-              itemUrl={groc.imageUrl}
-            />
-          </Col>
-        );
-      })}
+      {groceries.status == 'loading' && '...loading'}
+      {groceries.status == 'error' && groceries.msg}
+
+      {groceries.status === 'success' &&
+        groceries.data.map((groc) => {
+          return (
+            <Col>
+              <GroceryCard
+                itemId={groc.id}
+                itemName={groc.name}
+                itemWeight={groc.weight}
+                itemPrice={groc.price}
+                itemUrl={groc.imageUrl}
+              />
+            </Col>
+          );
+        })}
     </Row>
   );
 }

@@ -1,34 +1,34 @@
 import random
 INGREDIENTS = [
-    # Grains & Breads
-    "bread", "pasta", "rice", "quinoa", "oats", "tortilla", "bagel", "bun",
+    # Korn og brød
+    "brød", "pasta", "ris", "quinoa", "havre", "tortilla", "bagel", "bolle",
 
-    # Proteins
-    "chicken", "beef", "fish", "egg", "tofu", "lentils", "chickpeas", "pork",
-    "turkey", "shrimp", "bacon", "sausages",
+    # Proteiner
+    "kylling", "storfe", "fisk", "egg", "tofu", "linser", "kikerter", "svin",
+    "kalkun", "reker", "bacon", "pølser",
 
-    # Vegetables
-    "onion", "garlic", "tomato", "bell pepper", "carrot", "spinach", "broccoli",
-    "zucchini", "mushroom", "potato", "sweet potato", "peas", "corn",
+    # Grønnsaker
+    "løk", "hvitløk", "tomat", "paprika", "gulrot", "spinat", "brokkoli",
+    "squash", "sopp", "potet", "søtpotet", "erter", "mais",
 
-    # Fruits
-    "apple", "banana", "orange", "grapes", "blueberries", "strawberries",
-    "pineapple", "mango", "avocado", "lemon",
+    # Frukt
+    "eple", "banan", "appelsin", "druer", "blåbær", "jordbær",
+    "ananas", "mango", "avokado", "sitron",
 
-    # Dairy
-    "milk", "cheese", "butter", "cream", "yogurt", "parmesan", "mozzarella",
+    # Meieriprodukter
+    "melk", "ost", "smør", "fløte", "yoghurt", "parmesan", "mozzarella",
 
-    # Spices & Herbs
-    "salt", "pepper", "cumin", "turmeric", "paprika", "oregano", "basil",
-    "parsley", "coriander", "chili flakes", "cinnamon", "nutmeg",
+    # Krydder og urter
+    "salt", "pepper", "spisskummen", "gurkemeie", "paprika", "oregano", "basilikum",
+    "persille", "koriander", "chiliflak", "kanel", "muskat",
 
-    # Sauces & Condiments
-    "ketchup", "mayonnaise", "mustard", "soy sauce", "vinegar", "honey",
-    "peanut butter", "barbecue sauce", "hot sauce", "pesto",
+    # Sauser og dressinger
+    "ketchup", "majones", "sennep", "soyasaus", "eddik", "honning",
+    "peanøttsmør", "barbecuesaus", "hotsaus", "pesto",
 
-    # Other Ingredients
-    "olive oil", "sugar", "flour", "yeast", "baking powder", "syrup",
-    "nuts", "seeds", "chocolate chips", "coconut milk"
+    # Andre ingredienser
+    "olivenolje", "sukker", "mel", "gjær", "bakepulver", "sirup",
+    "nøtter", "frø", "sjokoladedråper", "kokosmelk"
 ]
 
 

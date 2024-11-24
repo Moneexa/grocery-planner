@@ -40,7 +40,9 @@ export const MealSchedule: React.FC = () => {
                     cover={
                       <img
                         alt="example"
-                        src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
+                        src={
+                          'https://bilder.kolonial.no/oppskrifter/8c746307-f796-4f5b-b8d1-0993a75e48a5.jpg?auto=format&fit=clip&q=75&w=1200&s=461f46f93a2c675c42883057d6f71bad'
+                        }
                       />
                     }
                   >
