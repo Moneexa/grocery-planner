@@ -1,31 +1,18 @@
 import { Card, Col, Row } from 'antd';
-import { useEffect, useState } from 'react';
-import { Plan } from '../../../../types';
 import { fetchPlans } from '../../../../shared-component/shared-apis';
+import { usePromise } from '../../../../shared-component/hooks';
 
 export default function TodayFood({ today }: { today: boolean }) {
-  const [plan, setPlan] = useState<Plan>({
-    name: '',
-    days: 0,
-    dietaryPreference: [],
-    endDate: 0,
-    recipes: [],
-    startDate: 0,
-  });
-  //fetch plan
-  useEffect(() => {
-    async function abc() {
-      const activePlan = await fetchPlans();
-      setPlan(activePlan);
-    }
-    abc();
-  }, []);
+  const plan = usePromise(fetchPlans);
+
+  if (plan.status === 'loading') return '...Loading';
+  if (plan.status === 'error') return plan.msg;
 
   const { Meta } = Card;
   return (
     <Card title={`${today ? 'Today' : 'Tomorrow'} Food`} bordered={true}>
       <Row justify={'center'} gutter={[5, 5]}>
-        {plan.recipes.map((item) => {
+        {plan.data.recipes.map((item) => {
           if (today ? item.date <= Date.now() : item.date > Date.now()) {
             return (
               <>
