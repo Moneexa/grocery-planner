@@ -4,7 +4,7 @@ import 'chart.js/auto';
 const IngredientBarChart = ({
   data,
 }: {
-  data: { ingredient: string; price: string }[];
+  data: { ingredient: string; price: number }[];
 }) => {
   const labels = data.map((item) => item.ingredient); // Ingredient names
   const counts = data.map((item) => item.price); // Ingredient counts

@@ -1,25 +1,17 @@
 import { Col, Row } from 'antd';
-import { APIResponse, GroceryItem } from '../../../../types';
-import { useEffect, useMemo, useState } from 'react';
 import GroceryCard from './IndividualGrocery';
-import axios from 'axios';
+import { usePromise } from '../../../../shared-component/hooks';
+import { listGroceries } from '../../../../shared-component/shared-apis';
 
 export default function GroceryGrid({
   groceryIngredient,
 }: {
   groceryIngredient: string;
 }) {
-  const [groceries, setGroceries] = useState<APIResponse<GroceryItem[]>>({
-    status: 'loading',
-  });
-  useEffect(() => {
-    axios
-      .get(`/api/grocery-items?name=${groceryIngredient}`)
-      .then((response) => {
-        setGroceries({ status: 'success', data: response.data });
-      })
-      .catch((error) => setGroceries({ status: 'error', msg: error }));
-  }, [groceryIngredient]);
+  const groceries = usePromise(
+    () => listGroceries(groceryIngredient),
+    [groceryIngredient],
+  );
   return (
     <Row gutter={16}>
       {groceries.status == 'loading' && '...loading'}

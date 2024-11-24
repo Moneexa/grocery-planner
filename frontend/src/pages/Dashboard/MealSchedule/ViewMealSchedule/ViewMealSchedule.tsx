@@ -1,24 +1,11 @@
-import { useEffect, useState } from 'react';
 import { Card, Row, Col } from 'antd';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
-import { APIResponse, Recipe } from '../../../../types';
+import { usePromise } from '../../../../shared-component/hooks';
+import { listPlanRecipes } from '../../../../shared-component/shared-apis';
 
 export default function PlanFoodGrid() {
   const { planId } = useParams();
-  const [recipes, setRecipes] = useState<APIResponse<Recipe[]>>({
-    status: 'loading',
-  });
-  useEffect(() => {
-    axios
-      .get<Recipe[]>(`/api/plans/${planId}`)
-      .then((response) => {
-        setRecipes({ status: 'success', data: response.data });
-      })
-      .catch((error) => {
-        setRecipes({ status: 'error', msg: error });
-      });
-  }, []);
+  const recipes = usePromise(() => listPlanRecipes(planId));
 
   return (
     <>

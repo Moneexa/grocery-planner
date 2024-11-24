@@ -1,29 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Card, Button, Empty, Row, Col, Flex, FloatButton } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { Plan, APIResponse } from '../../../types';
 import { Link, redirect } from 'react-router-dom';
-import axios from 'axios';
+import { usePromise } from '../../../shared-component/hooks';
+import { listPlans } from '../../../shared-component/shared-apis';
 
 export const MealSchedule: React.FC = () => {
   const { Meta } = Card;
-  const [plans, setPlans] = useState<APIResponse<Plan[]>>({
-    status: 'loading',
-  });
-  useEffect(() => {
-    axios
-      .get('/api/plans')
-      .then((response) => {
-        setPlans({
-          status: 'success',
-          data: response.data,
-        });
-      })
-      .catch((error) => {
-        setPlans({ status: 'error', msg: error.message });
-      });
-  }, []);
-
+  const plans = usePromise(listPlans);
   return (
     <div style={{ position: 'relative' }}>
       {plans.status === 'loading' && '...loading'}

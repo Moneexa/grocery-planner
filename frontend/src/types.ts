@@ -51,3 +51,5 @@ export type APIResponse<T> =
       status: 'success';
       data: T;
     };
+
+export type ExistingPlan = Required<Plan>;

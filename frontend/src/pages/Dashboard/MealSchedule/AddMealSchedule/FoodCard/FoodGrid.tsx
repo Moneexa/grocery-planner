@@ -1,9 +1,11 @@
 import { Col, Row } from 'antd';
 import FoodCard from './FoodCard';
-import { APIResponse, Food, Recipe } from '../../../../../types';
-import { useContext, useEffect, useState } from 'react';
+import { Recipe } from '../../../../../types';
+import { useContext } from 'react';
 import { PlanContext } from '../../../../../store/PlanProvider';
-import axios from 'axios';
+
+import { usePromise } from '../../../../../shared-component/hooks';
+import { searchMeals } from '../../../../../shared-component/shared-apis';
 
 export default function FoodGrid({
   name,
@@ -15,24 +17,10 @@ export default function FoodGrid({
   date: number;
 }) {
   const { plan } = useContext(PlanContext);
-  const [meal, setMeal] = useState<APIResponse<Food[]>>({
-    status: 'loading',
-  });
-  useEffect(() => {
-    const dietaryApplication = plan.dietaryPreference.map(
-      (val) => `&dietary=${val}`,
-    );
-    axios
-      .get(
-        `/api/recipe/get-dishes-list?meal_type=${category}&name=${name}${dietaryApplication}`,
-      )
-      .then((response) => {
-        setMeal({ status: 'success', data: response.data });
-      })
-      .catch((error) => {
-        setMeal({ status: 'error', msg: 'Somthing unexpected happened' });
-      });
-  }, [name, category, date]);
+  const meal = usePromise(
+    () => searchMeals(name, category, plan.dietaryPreference),
+    [name, category, date],
+  );
 
   return (
     <Row gutter={16}>

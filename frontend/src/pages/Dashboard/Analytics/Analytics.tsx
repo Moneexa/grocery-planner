@@ -1,24 +1,22 @@
 import { Card, Col, Row } from 'antd';
 import TodayFood from './TodayFood/TodayFood';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
 import IngredientBarChart from './IngredientCost/IngredientCost';
 import PlanCostLineChart from './HistoricalCos/HistoricalCost';
+import { usePromise } from '../../../shared-component/hooks';
+import { getInsights } from '../../../shared-component/shared-apis';
 
 export function Analytics() {
-  const [barChartData, setBarChartData] = useState<
-    { ingredient: string; price: string }[]
-  >([]);
-  const [lineChartData, setLineChartData] = useState([]);
-  useEffect(() => {
-    axios
-      .get('/api/insights/')
-      .then((response) => {
-        setBarChartData(response.data.barChartData);
-        setLineChartData(response.data.lineChartData);
-      })
-      .catch((error) => console.error('Error fetching plan data:', error));
-  }, []);
+  const response = usePromise(getInsights);
+
+  if (response.status === 'loading') {
+    return <>Loading...</>;
+  }
+
+  if (response.status === 'error') {
+    return <div>{response.msg}</div>;
+  }
+
+  const { barChartData, lineChartData } = response.data;
 
   return (
     <>
