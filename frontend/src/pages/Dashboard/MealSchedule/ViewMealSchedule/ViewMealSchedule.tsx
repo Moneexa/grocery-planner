@@ -1,4 +1,4 @@
-import { Card, Row, Col } from 'antd';
+import { Card, Row, Col, Image } from 'antd';
 import { useParams } from 'react-router-dom';
 import { usePromise } from '../../../../shared-component/hooks';
 import { listPlanRecipes } from '../../../../shared-component/shared-apis';
@@ -22,7 +22,7 @@ export default function PlanFoodGrid() {
                   <Card
                     hoverable
                     cover={
-                      <img
+                      <Image
                         alt={recipe.frukost?.name}
                         src={recipe.frukost?.imageUrl}
                         style={{ height: 150, objectFit: 'cover' }}
@@ -31,7 +31,7 @@ export default function PlanFoodGrid() {
                   >
                     <Card.Meta
                       title={recipe.frukost?.name}
-                      description={recipe.frukost?.timeTaken}
+                      description={`Cooking time: ${recipe.frukost?.timeTaken || 'N/A'}`}
                     />
                   </Card>
                 </Col>
@@ -39,7 +39,7 @@ export default function PlanFoodGrid() {
                   <Card
                     hoverable
                     cover={
-                      <img
+                      <Image
                         alt={recipe.lunsj?.name}
                         src={recipe.lunsj?.imageUrl}
                         style={{ height: 150, objectFit: 'cover' }}
@@ -48,7 +48,7 @@ export default function PlanFoodGrid() {
                   >
                     <Card.Meta
                       title={recipe.lunsj?.name}
-                      description={recipe.lunsj?.timeTaken}
+                      description={`Cooking time: ${recipe.lunsj?.timeTaken || 'N/A'}`}
                     />
                   </Card>
                 </Col>
@@ -56,16 +56,16 @@ export default function PlanFoodGrid() {
                   <Card
                     hoverable
                     cover={
-                      <img
+                      <Image
                         alt={recipe.middag?.name}
                         src={recipe.middag?.imageUrl}
-                        style={{ height: 150, objectFit: 'cover' }}
+                        height={150}
                       />
                     }
                   >
                     <Card.Meta
                       title={recipe.middag?.name}
-                      description={recipe.middag?.timeTaken}
+                      description={`Cooking time: ${recipe.middag?.timeTaken || 'N/A'}`}
                     />
                   </Card>
                 </Col>

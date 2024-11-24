@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import AddMealPlanForm from './AddMealForm';
+import AddMealPlanForm from './AddMealForm/AddMealForm';
 import { PlanContext } from '../../../../store/PlanProvider';
 import { InitModal } from './InitModal';
 import dayjs from 'dayjs';

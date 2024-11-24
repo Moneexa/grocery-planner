@@ -2,12 +2,11 @@ import { useContext, useMemo, useRef, useState } from 'react';
 import { Steps, Card, Button, Row, Col, Input } from 'antd';
 import { CheckCircleOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
-import FoodGrid from './FoodCard/FoodGrid';
-import { PlanContext } from '../../../../store/PlanProvider';
-import { APIResponse, Recipe } from '../../../../types';
+import FoodGrid from './FoodGrid';
+import { PlanContext } from '../../../../../store/PlanProvider';
+import { APIResponse, Recipe } from '../../../../../types';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { toSnakeCase } from '../../../../constants/caseConverter';
 
 const { Step } = Steps;
 
@@ -16,7 +15,7 @@ function AddMealPlanForm() {
   const { plan } = useContext(PlanContext);
   const { recipes } = plan;
 
-  const [apiData, setApiData] = useState<APIResponse<string>>({
+  const [postReponse, setPostResponse] = useState<APIResponse<string>>({
     status: 'loading',
   });
   const [selectedRecipeDate, setSelectedRecipeDate] = useState(
@@ -49,13 +48,13 @@ function AddMealPlanForm() {
   const onSubmit = async () => {
     const response = await axios.post('/api/plans/add/', plan);
     if (response.data) {
-      setApiData({
+      setPostResponse({
         status: 'success',
         data: 'Your plan has been added',
       });
       navigate('/app/groceries/add');
     }
-    setApiData({
+    setPostResponse({
       status: 'error',
       msg: 'There is some problem doing the request',
     });
@@ -89,6 +88,8 @@ function AddMealPlanForm() {
 
   return (
     <Card title="Select your dishes for the meal plan" size="small">
+      {postReponse.status === 'error' &&
+        'Something went wrong while adding the meal'}
       <Row>
         <Col span={6}>
           <Steps direction="vertical" current={selectedRecipeDate} size="small">
