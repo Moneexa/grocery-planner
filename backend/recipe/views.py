@@ -1,22 +1,23 @@
 from django.http import JsonResponse
 from .formatter import convert_to_food_format
-from .meal_data import fetch_frukost_data,fetch_lunsj_data,fetch_middag_data
+from .meal_data import fetch_recipe_data
+from django.core.cache import cache
 
 def get_data(request):
     # Parse dietary preferences from the URL
     meal_type = request.GET.get("meal_type", "").lower()  # Default to empty string if not provided
     name = request.GET.get("name", "").lower()
     dietary_preferences = request.GET.getlist("dietary")  # Get multiple values for 'dietary'
+    # Getting cache data if it already exists
+    cache_key = f'resp_recipes.{meal_type}.{name}.{".".join(sorted(dietary_preferences))}'
+    cached_resp = cache.get(cache_key)
+    if cached_resp:
+        return JsonResponse(cached_resp, safe=False)
     # Fetch data based on meal type
     meal_type = meal_type.lower()
-    if meal_type == "frukost":
-        data = convert_to_food_format(fetch_frukost_data())
-    elif meal_type == "lunsj":
-        data = convert_to_food_format(fetch_lunsj_data())
-    elif meal_type == "middag":
-        data = convert_to_food_format(fetch_middag_data())
-    else:
+    if meal_type not in ["frukost", "lunsj", "middag"]:
         return JsonResponse({"error": "Invalid meal type provided"}, status=400)
+    data=convert_to_food_format(fetch_recipe_data(meal_type))
 
     # Filter based on dish name and dietary preferences
     name = name.lower()  # Normalize to lowercase
@@ -28,5 +29,5 @@ def get_data(request):
             and (not name or name in item["name"].lower())
         )
     ][:8]  # Limit to 8 items
-
+    cache.set(cache_key, filtered_data, timeout=60 * 15)
     return JsonResponse(filtered_data, safe=False)
