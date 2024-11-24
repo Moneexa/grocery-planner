@@ -1,13 +1,14 @@
 import React from 'react';
 import { Card, Button, Empty, Row, Col, Flex, FloatButton } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { Link, redirect } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { usePromise } from '../../../shared/hooks';
 import { listPlans } from '../../../shared/apis';
 
 export const MealSchedule: React.FC = () => {
   const { Meta } = Card;
   const plans = usePromise(listPlans);
+  const navigate = useNavigate();
   return (
     <div style={{ position: 'relative' }}>
       {plans.status === 'loading' && '...loading'}
@@ -20,7 +21,7 @@ export const MealSchedule: React.FC = () => {
                 <Link to={`/app/meal-schedule/${plan.id}`}>
                   <Card
                     hoverable
-                    style={{ width: 240 }}
+                    style={{ width: '100%' }}
                     cover={
                       <img
                         alt="example"
@@ -43,13 +44,18 @@ export const MealSchedule: React.FC = () => {
             type="primary"
             shape="circle"
             icon={<PlusOutlined />}
-            onClick={() => redirect('/app/meal-schedule/add')}
+            onClick={() => navigate('/app/meal-schedule/add')}
           ></FloatButton>
         </>
       ) : (
         <Flex align="center" justify="center" vertical gap={10}>
           <Empty description="You have no plans added, please add one." />
-          <Button type="primary" icon={<PlusOutlined />} size="large">
+          <Button
+            onClick={() => navigate('/app/meal-schedule/add')}
+            type="primary"
+            icon={<PlusOutlined />}
+            size="large"
+          >
             <Link to="/app/meal-schedule/add">Add Meal</Link>
           </Button>
         </Flex>

@@ -15,7 +15,7 @@ export function Dashboard() {
   const [collapsed, setCollapsed] = useState(false);
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
+    <Layout style={{ height: '100vh' }}>
       <Sider
         collapsible
         collapsed={collapsed}
@@ -23,11 +23,9 @@ export function Dashboard() {
       >
         <OdaMenu />
       </Sider>
-      <Layout>
-        <Content style={{ margin: '16px' }}>
-          <Outlet />
-        </Content>
-      </Layout>
+      <Content style={{ margin: '16px', overflow: 'auto' }}>
+        <Outlet />
+      </Content>
     </Layout>
   );
 }
