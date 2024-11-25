@@ -3,7 +3,7 @@
 The project comprises of 2 parts. Grocery planner FrontEnd and GroceryPlanner Backend.
 
 ## Clone the Repo:
-git clone https://github.com/your-username/grocery-planner.git
+git clone https://github.com/Moneexa/grocery-planner.git
 
 
 
