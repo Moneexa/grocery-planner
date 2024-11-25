@@ -22,28 +22,27 @@ class Plan(models.Model):
 
 class Recipe(models.Model):
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, auto_created=True)
     plan = models.ForeignKey(Plan, related_name='recipes', on_delete=models.CASCADE)
     date = models.IntegerField()
     frukost= models.JSONField(default=None)
     lunsj= models.JSONField(default=None)
     middag= models.JSONField(default=None)
     applicableDietary = models.JSONField(default=list, blank=True)  # e.g., ["vegan"]
-
     def __str__(self):
         return f"{self.id}"
 
-class GroceryPlan(models.Model):
+class PlanCheckout(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    plan = models.OneToOneField(Plan, related_name='grocery_plan', on_delete=models.CASCADE)
+    plan = models.OneToOneField(Plan, related_name='plan_checkout', on_delete=models.CASCADE)
     cost = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
         return f"Grocery Plan for {self.plan.name}"
 
 class GroceryItem(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    groceryPlan = models.ForeignKey(GroceryPlan, related_name='grocery_items', on_delete=models.CASCADE)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, auto_created=True)
+    planCheckout = models.ForeignKey(PlanCheckout, related_name='grocery_items', on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     imageUrl = models.URLField(max_length=500, blank=True)
     weight = models.CharField(max_length=100)  # e.g., "500g", "1kg"

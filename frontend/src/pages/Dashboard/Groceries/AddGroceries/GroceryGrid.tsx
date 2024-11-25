@@ -26,6 +26,7 @@ export default function GroceryGrid({
         groceries.data.map((groc) => {
           return (
             <GroceryCard
+              key={groc.id}
               itemId={groc.id}
               itemName={groc.name}
               itemWeight={groc.weight}

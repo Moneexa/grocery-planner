@@ -1,5 +1,5 @@
 import { useState, createContext } from 'react';
-import { Food, GroceryItem, GroceryPlan, Plan, Recipe } from '../types';
+import { Food, GroceryItem, PlanCheckout, Plan, Recipe } from '../types';
 
 const defaultPlan: Plan = {
   days: 0,
@@ -9,7 +9,7 @@ const defaultPlan: Plan = {
   dietaryPreference: [],
   recipes: [],
 };
-const defaultGroceryPlan: GroceryPlan = {
+const defaultPlanCheckout: PlanCheckout = {
   cost: 0,
   groceries: [],
   planId: '0',
@@ -28,13 +28,13 @@ type Actions = {
 
 type PlanStore = {
   plan: Plan;
-  grocery: GroceryPlan;
+  grocery: PlanCheckout;
 } & Actions;
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const PlanContext = createContext<PlanStore>({
   plan: defaultPlan,
-  grocery: defaultGroceryPlan,
+  grocery: defaultPlanCheckout,
   addFood: noop,
   changePlan: noop,
   addGrocery: noop,
@@ -42,7 +42,7 @@ export const PlanContext = createContext<PlanStore>({
 
 function PlanProvider({ children }: { children: React.ReactNode }) {
   const [plan, setPlan] = useState(defaultPlan);
-  const [grocery, setGrocery] = useState(defaultGroceryPlan);
+  const [grocery, setGrocery] = useState(defaultPlanCheckout);
 
   const changePlan = (payload: Plan) => setPlan(payload);
 

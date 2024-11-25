@@ -16,12 +16,17 @@ export default function Groceries() {
   const handleCheckOut = async () => {
     if (plan.status !== 'success') return;
     setLoading(true);
-
+    const copyGrocery = structuredClone(grocery);
+    const updatedGroceries = copyGrocery.groceries.map((item) => ({
+      ...item,
+      id: undefined,
+    }));
     const payload = {
       ...grocery,
+      groceries: updatedGroceries,
       planId: plan.data.id,
     };
-    const response = await axios.post('/api/grocery-plan/add/', payload);
+    const response = await axios.post('/api/plan-checkout/add/', payload);
     if (response) {
       setLoading(false);
     } else {

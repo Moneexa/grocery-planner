@@ -1,7 +1,7 @@
 import {
   CalendarOutlined,
-  ShoppingCartOutlined,
   ContainerOutlined,
+  HomeOutlined,
 } from '@ant-design/icons';
 import { Menu } from 'antd';
 import type { GetProp, MenuProps } from 'antd';
@@ -11,17 +11,19 @@ type MenuItem = GetProp<MenuProps, 'items'>[number];
 
 const items: MenuItem[] = [
   {
-    key: '1',
+    key: '',
+    icon: <HomeOutlined />,
+    label: <Link to="/app/">Home</Link>,
+  },
+
+  {
+    key: 'meal-schedule',
     icon: <CalendarOutlined />,
     label: <Link to="/app/meal-schedule">Meal Schedule</Link>,
   },
+
   {
-    key: '2',
-    icon: <ShoppingCartOutlined />,
-    label: <Link to="/app/groceries">Groceries</Link>,
-  },
-  {
-    key: '3',
+    key: 'pantry',
     icon: <ContainerOutlined />,
     label: <Link to="/app/pantry">Pantry</Link>,
   },
@@ -29,11 +31,12 @@ const items: MenuItem[] = [
 
 export function OdaMenu() {
   const location = useLocation();
-  const selectedKey = location.pathname.split('/').pop() || 'meal-schedule';
+  const selectedKey = location.pathname.split('/')[2];
 
   return (
     <Menu
       theme="dark"
+      selectedKeys={[selectedKey]}
       defaultSelectedKeys={[selectedKey]}
       items={items}
       mode="inline"

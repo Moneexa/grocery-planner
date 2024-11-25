@@ -1,26 +1,24 @@
 import axios from 'axios';
-import { ExistingPlan, Food, GroceryItem, Recipe } from '../types';
+import { ExistingPlan, Food, GroceryItem, Plan, Recipe } from '../types';
 
 export async function fetchPlans() {
   const response = await axios.get<ExistingPlan>('/api/plans/today');
   return response.data;
 }
 
-export async function fetchGroceries() {
-  try {
-    const response = await axios.get('/api/grocery-plan/');
-    const { groceryPlan, groceryItems } = response.data;
-
-    return {
-      cost: groceryPlan.cost,
-      planId: groceryPlan.plan,
-      groceries: groceryItems,
-    };
-  } catch {
-    return {
-      error: 'Something wrong happeend',
-    };
-  }
+export async function fetchGroceries(): Promise<{
+  cost: number;
+  plan: Plan;
+  groceryItems: GroceryItem[];
+}> {
+  const { data } = await axios.get<
+    Promise<{
+      cost: number;
+      plan: Plan;
+      groceryItems: GroceryItem[];
+    }>
+  >('/api/plan-checkout/');
+  return data;
 }
 
 export async function listPlans(): Promise<ExistingPlan[]> {

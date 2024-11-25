@@ -1,5 +1,5 @@
 export type FoodItem = {
-  id: string;
+  id?: string;
   name: string;
   imageUrl: string;
 };
@@ -33,7 +33,7 @@ export type Plan = {
   dietaryPreference: string[];
 };
 
-export type GroceryPlan = {
+export type PlanCheckout = {
   planId: Plan['id'];
   cost: number;
   groceries: GroceryItem[];

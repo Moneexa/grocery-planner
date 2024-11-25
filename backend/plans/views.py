@@ -19,7 +19,6 @@ def getData(request):
         return Response({"error": "User not authenticated or session expired."}, status=401)
     plans = Plan.objects.filter(user=user_id)
     serializer = PlanSerializer(plans, many=True)
-    print(f"User ID: {user_id}")
     return Response(serializer.data, status=200)
 
 
@@ -30,7 +29,6 @@ def postData(request):
         plan_serializer=PlanSerializer(data=request.data)
         if plan_serializer.is_valid():
             plan=plan_serializer.save()
-            print("this is the data to be sent",plan_serializer.data)
             recipes_data = request.data.get('recipes', [])
             if isinstance(recipes_data, list):  # Ensure recipes is a list
                 for recipe_data in recipes_data:
@@ -56,7 +54,6 @@ def get_plan_recipes(request, plan_id):
     if(request.session.get("userId")):
         recipes = Recipe.objects.filter(plan_id=plan_id)
         serializer = RecipeSerializer(recipes,many=True)
-        print("this is serializer", recipes)
         return Response(serializer.data)
     else:
         return Response({"error":"Your request is not valid"},401)
@@ -77,7 +74,9 @@ def get_today_plan(request):
             user_id=user_id,
             startDate__lte=today,
             endDate__gte=today
-        ).first()
+        ).last()
+        if plan is None:
+            raise Plan.DoesNotExist
 
         # Fetch related recipes using the related_name 'recipes'
         recipes = plan.recipes.all()
@@ -96,5 +95,4 @@ def get_today_plan(request):
     except Plan.DoesNotExist:
         return Response({"error": "No plan found for today."}, status=404)
     except Exception as e:
-        print(str(e))
         return Response({"error": str(e)}, status=500)

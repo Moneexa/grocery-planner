@@ -11,7 +11,6 @@ def get_data(request):
     """
     # Extract 'name' query parameter from the request
     name = request.GET.get("name", "").lower()
-    print(name) 
     if not name:
         return JsonResponse({"error": "The 'name' query parameter is required."}, status=400)
     #Caching

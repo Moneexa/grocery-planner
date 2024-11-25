@@ -11,7 +11,7 @@ function GroceryCard({
   itemWeight,
   itemUrl,
 }: {
-  itemId: string;
+  itemId?: string;
   itemName: string;
   itemPrice: string;
   itemWeight: string;
