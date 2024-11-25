@@ -67,22 +67,22 @@ Before setting up the project, ensure you have the following installed:
 ---
 
 ## Setup Instructions
-###1. Enter the repo.
+### 1. Enter the repo.
 `cd backend`
-###2. Set Up a Virtual Environment
+### 2. Set Up a Virtual Environment
 `python -m venv venv`
-###3. Activate the virtual environment:
+### 3. Activate the virtual environment:
 
-####1. Windows:
+#### 1. Windows:
 `venv\Scripts\activate`
-####2. Linux/MacOS:
+#### 2. Linux/MacOS:
 `source venv/bin/activate`
-###3. Install Dependencies
+### 4. Install Dependencies
 `pip install -r requirements.txt`
-###4. Apply Migrations
+### 5. Apply Migrations
 `python manage.py makemigrations`
 `python manage.py migrate`
-###5. Run the Development Server
+### 6. Run the Development Server
 `python manage.py runserver`
 
 #Grocery Planner Frontend
@@ -108,13 +108,13 @@ Ensure you have the following installed before setting up the frontend:
 
 ## Setup Instructions
 
-### 1. Clone the Repository
+### 1. Enter Repo
 `cd frontend`
 
-###2. Install Dependencies
+### 2. Install Dependencies
 `npm install`
 
-###3. Run the Development Server
+### 3. Run the Development Server
 `npm run dev`
 
 ###4. This will start the development server. The frontend can be accessed at:
