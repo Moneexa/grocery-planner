@@ -9,5 +9,5 @@ and more options for groceries e.g, price filter, availability. etc.
 ## 3. Payment Integration
 I could have added payment integration when user checkouts.
 
-##4. Control the number of groceries while selection.
+## 4. Control the number of groceries while selection.
 Allow user to select one grocery item twice or thrice, or decrement this count.
