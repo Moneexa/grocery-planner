@@ -67,29 +67,23 @@ Before setting up the project, ensure you have the following installed:
 ---
 
 ## Setup Instructions
-
-cd backend
+###1. Enter the repo.
+`cd backend`
 ###2. Set Up a Virtual Environment
-```bash```
-python -m venv venv
+`python -m venv venv`
 ###3. Activate the virtual environment:
 
 ####1. Windows:
-```bash```
-venv\Scripts\activate
+`venv\Scripts\activate`
 ####2. Linux/MacOS:
-```bash```
-source venv/bin/activate
+`source venv/bin/activate`
 ###3. Install Dependencies
-`bash`
-pip install -r requirements.txt
+`pip install -r requirements.txt`
 ###4. Apply Migrations
-`bash`
-python manage.py makemigrations
-python manage.py migrate
-###6. Run the Development Server
-`bash`
-python manage.py runserver
+`python manage.py makemigrations`
+`python manage.py migrate`
+###5. Run the Development Server
+`python manage.py runserver`
 
 #Grocery Planner Frontend
 This is the frontend for the grocery planner app. It is built using React.
@@ -115,18 +109,14 @@ Ensure you have the following installed before setting up the frontend:
 ## Setup Instructions
 
 ### 1. Clone the Repository
-```bash```
-cd frontend
+`cd frontend`
 
 ###2. Install Dependencies
-```bash```
-npm install
+`npm install`
 
 ###3. Run the Development Server
-```bash```
-npm run dev
+`npm run dev`
 
 ###4. This will start the development server. The frontend can be accessed at:
-```bash```
-http://localhost:3000
+`http://localhost:3000`
 
