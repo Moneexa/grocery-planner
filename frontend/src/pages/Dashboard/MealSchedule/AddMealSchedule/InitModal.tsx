@@ -46,8 +46,7 @@ export function InitModal({ isModalOpen, onClose }: InitModalProps) {
         )
       }
       okButtonProps={{
-        disabled:
-          !name || !startDate || !endDate || !dietaryRestriction?.length,
+        disabled: !name || !startDate || !endDate,
       }}
       onCancel={() => navigate('/app/meal-schedule')}
     >

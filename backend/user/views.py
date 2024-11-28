@@ -21,12 +21,5 @@ def add_user(request):
     
         return Response(serializer.data)    
     
-def validate_user(request):
-    user_id=request.session.get("userId")
-    if not user_id:
-        return Response({"error":"User not authenticated or session expired."}, status=401)
-    else:
-        return user_id
- 
 
 

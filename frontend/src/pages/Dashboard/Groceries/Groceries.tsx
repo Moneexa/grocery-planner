@@ -27,12 +27,12 @@ export default function Groceries() {
       planId: plan.data.id,
     };
     const response = await axios.post('/api/plan-checkout/add/', payload);
-    if (response) {
+    if (response?.data) {
       setLoading(false);
     } else {
       setLoading(false);
 
-      alert('there is a problem adding groceries');
+      alert('there is a problem adding groceries' + response.status);
     }
   };
   return (

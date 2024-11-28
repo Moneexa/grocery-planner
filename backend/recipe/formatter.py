@@ -10,7 +10,7 @@ def convert_to_food_format(api_results):
             "timeTaken": result.get("cooking_duration_string", ""),
             "reciepe": result.get("", ""),
             "ingredients": get_random_ingredients(),
-            "applicableDietary": get_random_dietary_restrictions(),  # Random dietary restrictions
+            #"applicableDietary": get_random_dietary_restrictions(),  # Random dietary restrictions
         }
         foods.append(food)
     return foods

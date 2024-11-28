@@ -11,11 +11,10 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from base.models import Plan
 from .serializers import PlanSerializer
-from user.views import validate_user
 
 @api_view(['GET'])
 def getData(request):
-    user_id=validate_user(request=request)
+    user_id=request.user_id
     plans = Plan.objects.filter(user=user_id)
     serializer = PlanSerializer(plans, many=True)
     return Response(serializer.data, status=200)
@@ -23,7 +22,7 @@ def getData(request):
 
 @api_view(['POST'])
 def postData(request):
-    user_id=validate_user(request=request)
+    user_id=request.user_id
     if user_id:
         request.data['user']=request.session.get('userId')
         plan_serializer=PlanSerializer(data=request.data)
@@ -51,36 +50,35 @@ def postData(request):
 
 @api_view(['GET'])
 def get_plan_recipes(request, plan_id):
-    if validate_user(request=request):
         recipes = Recipe.objects.filter(plan_id=plan_id)
         serializer = RecipeSerializer(recipes,many=True)
         return Response(serializer.data)
-    else:
-        return Response({"error":"Your request is not valid"},401)
 
 
 def get_active_plan(today,user_id):
     # Get the current timestamp in milliseconds
     today = int(datetime.now().timestamp() * 1000)
+    dateFlag=datetime.now().date()
+    start_of_today = int(datetime.combine(dateFlag, datetime.min.time()).timestamp() * 1000)
 
     try:
         # Fetch the plan that falls within today's date range
         plan = Plan.objects.filter(
             user_id=user_id,
             startDate__lte=today,
-            endDate__gte=today
-        ).last()
+            endDate__gte= start_of_today
+              ).order_by('-startDate').first()  # Order by latest startDate
         if plan is None:
             raise Plan.DoesNotExist
         return plan
     except Plan.DoesNotExist:
-        return Response({"error": "No plan found for today."}, status=404)
+        return Response({"error": "No ongoing plan found."}, status=404)
 
 
 @api_view(['GET'])
 def get_today_plan(request):
     # Get user ID from session
-    user_id= validate_user(request=request)
+    user_id=request.user_id
     # Get the current timestamp in milliseconds
     today = int(datetime.now().timestamp() * 1000)
 

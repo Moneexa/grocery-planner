@@ -49,6 +49,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'user.auth_middleware.ValidateUserMiddleware'
 ]
 
 ROOT_URLCONF = 'grocery_organizer_backend.urls'

@@ -116,63 +116,36 @@ function AddMealPlanForm() {
             style={{ maxHeight: 'calc(100vh - 151px)', overflowY: 'auto' }}
             ref={colRef}
           >
-            <div>
-              <Row align="middle" justify="space-between">
-                <h1>Frukost</h1>
-                <div style={{ display: 'flex', gap: '8px' }}>
-                  <Input.Search
-                    placeholder="Search Frukost"
-                    enterButton
-                    onSearch={(name) => {
-                      handleSearch2('frukost', name);
-                    }}
-                  />
-                </div>
-              </Row>
+            {(['frukost', 'lunsj', 'middag'] as const).map((foodName) => {
+              if (
+                foodName === 'frukost' ||
+                foodName === 'lunsj' ||
+                foodName === 'middag'
+              ) {
+                return (
+                  <div>
+                    <Row align="middle" justify="space-between">
+                      <h1>{foodName}</h1>
+                      <div style={{ display: 'flex', gap: '8px' }}>
+                        <Input.Search
+                          placeholder={`Search ${foodName}`}
+                          enterButton
+                          onSearch={(name) => {
+                            handleSearch2(foodName, name);
+                          }}
+                        />
+                      </div>
+                    </Row>
 
-              <FoodGrid
-                category="frukost"
-                date={selectedRecipeDate}
-                name={searchTerms.frukost}
-              />
-            </div>
-
-            <div>
-              <Row align="middle" justify="space-between">
-                <h1>Lunsj</h1>
-                <div style={{ display: 'flex', gap: '8px' }}>
-                  <Input.Search
-                    placeholder="Search Lunsj"
-                    enterButton
-                    onSearch={(name) => handleSearch2('lunsj', name)}
-                  />
-                </div>
-              </Row>
-
-              <FoodGrid
-                category="lunsj"
-                date={selectedRecipeDate}
-                name={searchTerms.lunsj}
-              />
-            </div>
-
-            <div>
-              <Row align="middle" justify="space-between">
-                <h1>Middag</h1>
-                <div style={{ display: 'flex', gap: '8px' }}>
-                  <Input.Search
-                    placeholder="Search Middag"
-                    enterButton
-                    onSearch={(name) => handleSearch2('middag', name)}
-                  />
-                </div>
-              </Row>
-              <FoodGrid
-                category="middag"
-                date={selectedRecipeDate}
-                name={searchTerms.middag}
-              />
-            </div>
+                    <FoodGrid
+                      category={foodName}
+                      date={selectedRecipeDate}
+                      name={searchTerms[`${foodName}`]}
+                    />
+                  </div>
+                );
+              }
+            })}
           </Col>
         )}
       </Row>

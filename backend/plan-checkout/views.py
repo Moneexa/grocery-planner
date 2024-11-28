@@ -5,11 +5,9 @@ from grocery_item.serializer import GroceryItemSerializer
 from base.models import PlanCheckout, GroceryItem, Plan
 from plans.serializers import PlanSerializer
 from plans.views import get_active_plan
-from user.views import validate_user
 
 @api_view(['POST'])
 def addGroceries(request):
-    validate_user(request=request)
     planId = request.data.get("planId")
     if not planId:
         return Response({"error": "Plan ID is required"}, status=400)
@@ -43,7 +41,6 @@ def addGroceries(request):
 
 @api_view(['GET'])
 def getGroceryItems(request, planId):
-    validate_user(request)
     try:
         planCheckout = PlanCheckout.objects.get(plan=planId)
         groceryItems = GroceryItem.objects.filter(planCheckout=planCheckout)
@@ -61,7 +58,7 @@ from datetime import datetime
 def get_active_plan_with_groceries(request):
     # Get user ID from session
     
-    user_id=validate_user(request=request)
+    user_id=request.user_id
 
     # Get the current timestamp in milliseconds
     today = int(datetime.now().timestamp() * 1000)

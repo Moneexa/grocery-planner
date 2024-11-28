@@ -6,7 +6,7 @@ from plans.views import get_active_plan
 
 @api_view(['GET'])
 def get_plan_data_distribution(request):
-    user_id = request.session.get("userId")
+    user_id = request.user_id
     if not user_id:
         return Response({"error": "User not authenticated or session expired."}, status=401)
 
