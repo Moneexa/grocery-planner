@@ -11,8 +11,12 @@ export default function TodayFood({ today }: { today: boolean }) {
       {plan.status === 'success' && (
         <Card title={`${today ? 'Today' : 'Tomorrow'} Food`} bordered={true}>
           <Row justify={'center'} gutter={[5, 5]}>
-            {plan.data.recipes.map((item) => {
-              if (today ? item.date <= Date.now() : item.date > Date.now()) {
+            {plan.data.recipes.map((item, index) => {
+              if (
+                today
+                  ? item.date <= Date.now()
+                  : item.date > Date.now() && index == 1
+              ) {
                 return (
                   <>
                     <Col span={8}>

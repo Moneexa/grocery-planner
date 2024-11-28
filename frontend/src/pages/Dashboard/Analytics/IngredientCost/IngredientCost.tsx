@@ -1,13 +1,41 @@
 import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
+import { Button, Empty, Flex } from 'antd';
+import { Link } from 'react-router-dom';
+import { usePromise } from '../../../../shared/hooks';
+import { getInsights } from '../../../../shared/apis';
+import { PlusOutlined } from '@ant-design/icons';
 
-const IngredientBarChart = ({
-  data,
-}: {
-  data: { ingredient: string; price: number }[];
-}) => {
-  const labels = data.map((item) => item.ingredient); // Ingredient names
-  const counts = data.map((item) => item.price); // Ingredient counts
+const IngredientBarChart = () => {
+  const response = usePromise(getInsights);
+
+  if (response.status === 'loading') return '...Loading';
+  if (response.status === 'error')
+    return (
+      <Flex align="center" justify="center" vertical gap={10}>
+        <Empty description="You have no plans added, please add one." />
+        <Button type="primary" icon={<PlusOutlined />} size="large">
+          <Link to="/app/meal-schedule/add">Add Meal</Link>
+        </Button>
+      </Flex>
+    );
+  const { barChartData } = response.data;
+  if (barChartData.length == 0) {
+    return (
+      <Flex align="center" justify="center" vertical gap={10}>
+        <Empty description="You have not bought groceries for the current plan, please add one." />
+        <Button type="primary" icon={<PlusOutlined />} size="large">
+          <Link to="/app/groceries/add">Add Meal</Link>
+        </Button>
+      </Flex>
+    );
+  }
+  const labels = barChartData.map(
+    (item: { ingredient: string; price: number }) => item.ingredient,
+  ); // Ingredient names
+  const counts = barChartData.map(
+    (item: { ingredient: string; price: number }) => item.price,
+  ); // Ingredient counts
 
   const chartData = {
     labels,

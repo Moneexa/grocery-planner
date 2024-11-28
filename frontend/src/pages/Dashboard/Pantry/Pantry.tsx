@@ -8,7 +8,6 @@ import GroceryList from '../Groceries/GroceryList';
 
 export default function Pantry() {
   const activePlanCheckout = usePromise(fetchGroceries);
-  console.log(activePlanCheckout.status);
   return (
     <>
       {activePlanCheckout.status === 'loading' && <>...loading</>}

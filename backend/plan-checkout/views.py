@@ -68,7 +68,6 @@ def get_active_plan_with_groceries(request):
     try:
         plan = get_active_plan(today=today,user_id=user_id)
         plan_data = PlanSerializer(plan).data
-        print("****this is plan data***", plan)
         
         try:
             plan_checkout = plan.plan_checkout

@@ -23,7 +23,9 @@ def getData(request):
 
 @api_view(['POST'])
 def postData(request):
-    if validate_user(request=request):
+    user_id=validate_user(request=request)
+    if user_id:
+        request.data['user']=request.session.get('userId')
         plan_serializer=PlanSerializer(data=request.data)
         if plan_serializer.is_valid():
             plan=plan_serializer.save()
