@@ -4,10 +4,12 @@ from .serializers import PlanCheckoutSerializer
 from grocery_item.serializer import GroceryItemSerializer
 from base.models import PlanCheckout, GroceryItem, Plan
 from plans.serializers import PlanSerializer
+from plans.views import get_active_plan
+from user.views import validate_user
 
 @api_view(['POST'])
 def addGroceries(request):
-
+    validate_user(request=request)
     planId = request.data.get("planId")
     if not planId:
         return Response({"error": "Plan ID is required"}, status=400)
@@ -41,8 +43,8 @@ def addGroceries(request):
 
 @api_view(['GET'])
 def getGroceryItems(request, planId):
+    validate_user(request)
     try:
-
         planCheckout = PlanCheckout.objects.get(plan=planId)
         groceryItems = GroceryItem.objects.filter(planCheckout=planCheckout)
         serializer = GroceryItemSerializer(groceryItems, many=True)
@@ -58,24 +60,16 @@ from datetime import datetime
 @api_view(['GET'])
 def get_active_plan_with_groceries(request):
     # Get user ID from session
-    user_id = request.session.get("userId")
-    if not user_id:
-        return Response({"error": "User not authenticated or session expired."}, status=401)
+    
+    user_id=validate_user(request=request)
 
     # Get the current timestamp in milliseconds
     today = int(datetime.now().timestamp() * 1000)
-
     try:
-        # Fetch the active plan for the user
-
-
-        plan = Plan.objects.filter(
-            user_id=user_id,
-            startDate__lte=today,
-            endDate__gte=today
-        ).last()
+        plan = get_active_plan(today=today,user_id=user_id)
         plan_data = PlanSerializer(plan).data
-
+        print("****this is plan data***", plan)
+        
         try:
             plan_checkout = plan.plan_checkout
 

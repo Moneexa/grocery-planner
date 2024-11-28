@@ -2,6 +2,7 @@ from datetime import datetime
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from base.models import Plan
+from plans.views import get_active_plan
 
 @api_view(['GET'])
 def get_plan_data_distribution(request):
@@ -18,11 +19,7 @@ def get_plan_data_distribution(request):
         today = int(datetime.now().timestamp() * 1000)
 
         # Fetch the current active plan
-        current_plan = Plan.objects.filter(
-            user_id=user_id,
-            startDate__lte=today,
-            endDate__gte=today
-        ).last()
+        current_plan = get_active_plan(today=today, user_id=user_id)
 
         # Initialize response data
         current_plan_name = ""

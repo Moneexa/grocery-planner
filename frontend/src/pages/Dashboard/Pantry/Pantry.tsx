@@ -8,23 +8,10 @@ import GroceryList from '../Groceries/GroceryList';
 
 export default function Pantry() {
   const activePlanCheckout = usePromise(fetchGroceries);
-  // When you have the plan added but have not bought any groceries
-  if (
-    activePlanCheckout.status === 'success' &&
-    activePlanCheckout.data.groceryItems.length === 0
-  ) {
-    return (
-      <Flex align="center" justify="center" vertical gap={10}>
-        <Empty description="You have not bought any groceries" />
-        <Button type="primary" icon={<PlusOutlined />} size="large">
-          <Link to="/app/groceries/add">Buy groceries</Link>
-        </Button>
-      </Flex>
-    );
-  }
+  console.log(activePlanCheckout.status);
   return (
     <>
-      {activePlanCheckout.status === 'loading' && '...loading'}
+      {activePlanCheckout.status === 'loading' && <>...loading</>}
       {activePlanCheckout.status === 'error' && (
         <Flex align="center" justify="center" vertical gap={10}>
           <Empty description="You have no active current plan, please add one." />
@@ -33,14 +20,26 @@ export default function Pantry() {
           </Button>
         </Flex>
       )}
-      {activePlanCheckout.status === 'success' && (
-        <GroceryList
-          groceryList={{
-            cost: activePlanCheckout['data'].cost,
-            groceries: activePlanCheckout['data'].groceryItems,
-          }}
-        />
-      )}
+      {activePlanCheckout.status === 'success' &&
+        activePlanCheckout.data.groceryItems.length === 0 && (
+          <Flex align="center" justify="center" vertical gap={10}>
+            <Empty description="You have not bought any groceries" />
+            <Button type="primary" icon={<PlusOutlined />} size="large">
+              <Link to="/app/groceries/add">Buy groceries</Link>
+            </Button>
+          </Flex>
+        )}
+      {activePlanCheckout.status === 'success' &&
+        activePlanCheckout.data.groceryItems.length > 0 && (
+          <>
+            <GroceryList
+              groceryList={{
+                cost: activePlanCheckout['data'].cost,
+                groceries: activePlanCheckout['data'].groceryItems,
+              }}
+            />
+          </>
+        )}
     </>
   );
 }
