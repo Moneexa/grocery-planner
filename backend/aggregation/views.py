@@ -6,10 +6,7 @@ from plans.views import get_active_plan
 
 @api_view(['GET'])
 def get_plan_data_distribution(request):
-    user_id = request.user_id
-    if not user_id:
-        return Response({"error": "User not authenticated or session expired."}, status=401)
-
+    user_id=request.user_id
     try:
         # Check if any plans exist for the user
         if not Plan.objects.filter(user_id=user_id).exists():
@@ -37,7 +34,8 @@ def get_plan_data_distribution(request):
                     {"ingredient": item.name, "price": float(item.price)}
                     for item in grocery_items
                 ]
-
+        print("***this is current plan", bar_chart_data)
+        
         # Fetch all past plans for the line chart
         past_plans = Plan.objects.filter(user_id=user_id)
         for plan in past_plans:

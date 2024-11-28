@@ -72,7 +72,7 @@ def get_active_plan(today,user_id):
             raise Plan.DoesNotExist
         return plan
     except Plan.DoesNotExist:
-        return Response({"error": "No ongoing plan found."}, status=404)
+        return None
 
 
 @api_view(['GET'])
