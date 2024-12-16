@@ -1,0 +1,17 @@
+FROM node:20-alpine AS frontend
+
+# Set the working directory
+WORKDIR /app/frontend
+
+# Copy frontend code
+COPY ./package*.json ./
+RUN npm install
+COPY . ./
+
+COPY ./vite.config.docker.ts ./vite.config.ts
+
+
+
+EXPOSE 5173
+
+CMD ["sh", "-c", "npm run dev"]

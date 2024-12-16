@@ -1,0 +1,21 @@
+FROM python:3.12.8-alpine3.21
+
+# Set the working directory
+WORKDIR /app/backend
+
+# Install dependencies
+COPY ./requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy backend code
+COPY . .
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+# Expose the port Django will run on
+EXPOSE 8000
+
+# Run database migrations and start the Django development server
+CMD ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
