@@ -26,13 +26,15 @@ export default function Groceries() {
       groceries: updatedGroceries,
       planId: plan.data.id,
     };
-    const response = await axios.post('/api/plan-checkout/add/', payload);
-    if (response?.data) {
-      setLoading(false);
-    } else {
+    try {
+      const response = await axios.post('/api/plan-checkout/add/', payload);
+      if (response?.data) {
+        setLoading(false);
+      }
+    } catch {
       setLoading(false);
 
-      alert('there is a problem adding groceries' + response.status);
+      alert('You have added these groceries already');
     }
   };
   return (

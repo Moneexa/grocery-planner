@@ -9,12 +9,14 @@ from base.models import User
 def add_user(request):
     try:
         user = User.objects.get(email=request.data.get('email'))
+        print('came here',user)
         request.session["userId"]=str(user.id)
         return Response({})    
 
     except User.DoesNotExist:
         user={"email":request.data.get('email')}
         serializer=UserSerializer(data=user)
+        print('exeception reached')
         if serializer.is_valid():
             serializer.save()
         request.session["userId"]=str(serializer.data.get('id'))

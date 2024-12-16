@@ -1,15 +1,19 @@
 import { Line } from 'react-chartjs-2';
 import dayjs from 'dayjs';
 import { Button, Empty, Flex } from 'antd';
-import { usePromise } from '../../../../shared/hooks';
-import { getInsights } from '../../../../shared/apis';
 import { PlusOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 
-const PlanCostLineChart = () => {
-  const response = usePromise(getInsights);
-  if (response.status === 'loading') return '...Loading';
-  if (response.status === 'error')
+const PlanCostLineChart = ({
+  lineChartData,
+}: {
+  lineChartData: {
+    planName: string;
+    date: number;
+    cost: number;
+  }[];
+}) => {
+  if (lineChartData.length === 0)
     return (
       <Flex align="center" justify="center" vertical gap={10}>
         <Empty description="You have no plans added, please add one." />
@@ -18,7 +22,6 @@ const PlanCostLineChart = () => {
         </Button>
       </Flex>
     );
-  const { lineChartData } = response.data;
 
   const chartData = {
     labels: lineChartData.map((item) =>

@@ -56,18 +56,16 @@ def get_plan_recipes(request, plan_id):
 
 
 def get_active_plan(today,user_id):
-    # Get the current timestamp in milliseconds
     today = int(datetime.now().timestamp() * 1000)
     dateFlag=datetime.now().date()
     start_of_today = int(datetime.combine(dateFlag, datetime.min.time()).timestamp() * 1000)
 
     try:
-        # Fetch the plan that falls within today's date range
         plan = Plan.objects.filter(
             user_id=user_id,
             startDate__lte=today,
             endDate__gte= start_of_today
-              ).order_by('-startDate').first()  # Order by latest startDate
+              ).order_by('-startDate').first()
         if plan is None:
             raise Plan.DoesNotExist
         return plan

@@ -28,13 +28,13 @@ export async function listPlans(): Promise<ExistingPlan[]> {
 
 export async function getInsights() {
   const { data } = await axios.get<{
-    currentPlan: string;
     barChartData: { ingredient: string; price: number }[];
     lineChartData: {
       planName: string;
       date: number;
       cost: number;
     }[];
+    recipes: Recipe[];
   }>('/api/insights/');
   return data;
 }

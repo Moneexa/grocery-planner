@@ -9,7 +9,6 @@ def fetch_recipe_data(meal_type):
         return cached_data
     API_URL = f"https://oda.com/api/v1/search/recipes/?q={meal_type}" 
     response = requests.get(API_URL)
-    print("***here is the response for requested dish", response)
     response.raise_for_status()
     json = response.json().get("results", [])
     cache.set(cache_key, json, timeout=60 * 15)

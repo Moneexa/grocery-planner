@@ -6,7 +6,8 @@ class ValidateUserMiddleware:
 
     def __call__(self, request):
         # Exclude specific conditions
-        if request.method == 'POST' and request.path == '/user/':
+        if request.method == 'POST' and request.path == '/api/user/':
+
             # Allow the request to pass through
             return self.get_response(request)
 

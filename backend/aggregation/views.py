@@ -1,39 +1,50 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from base.models import Plan
+from base.models import Plan,Recipe
 from plans.views import get_active_plan
 
 @api_view(['GET'])
 def get_plan_data_distribution(request):
-    user_id=request.user_id
+    user_id = request.user_id
+    print("this is the user id", user_id)
     try:
-        # Check if any plans exist for the user
         if not Plan.objects.filter(user_id=user_id).exists():
             return Response({"error": "No plans found for the user."}, status=404)
 
-        # Get the current date in milliseconds
         today = int(datetime.now().timestamp() * 1000)
 
-        # Fetch the current active plan
         current_plan = get_active_plan(today=today, user_id=user_id)
 
-        # Initialize response data
-        current_plan_name = ""
         bar_chart_data = []
         line_chart_data = []
+        recipes = []
 
         if current_plan:
-            current_plan_name = current_plan.name
             plan_checkout = getattr(current_plan, 'plan_checkout', None)
 
             if plan_checkout:
-                # Fetch top 5 grocery items by price for the bar chart
                 grocery_items = plan_checkout.grocery_items.order_by('-price')[:5]
                 bar_chart_data = [
                     {"ingredient": item.name, "price": float(item.price)}
                     for item in grocery_items
                 ]
+
+            # Calculate the start and end timestamps for today and tomorrow
+            today_start = int(datetime.now().replace(hour=0, minute=0, second=0, microsecond=0).timestamp() * 1000)
+            tomorrow_end = int((datetime.now() + timedelta(days=1)).replace(hour=23, minute=59, second=59, microsecond=999).timestamp() * 1000)
+
+            # Fetch recipes for today and tomorrow
+            recipes_queryset = Recipe.objects.filter(
+                plan=current_plan,
+                date__gte=today_start,
+                date__lte=tomorrow_end
+            )
+            recipes = [
+                {"name": recipe.id, "date": recipe.date, "frukost": recipe.frukost, "lunsj": recipe.lunsj, "middag": recipe.middag}
+                for recipe in recipes_queryset
+            ]
+        
         print("***this is current plan", bar_chart_data)
         
         # Fetch all past plans for the line chart
@@ -48,9 +59,9 @@ def get_plan_data_distribution(request):
                 })
 
         return Response({
-            "currentPlan": current_plan_name,
             "barChartData": bar_chart_data,
-            "lineChartData": line_chart_data
+            "lineChartData": line_chart_data,
+            "recipes": recipes
         }, status=200)
 
     except Exception as e:
