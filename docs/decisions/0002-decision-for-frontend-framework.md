@@ -12,7 +12,7 @@ We want to decide which frontend framework would be better in our case.
 ## Decision Drivers
 
 * Reactive changes
-* Consistency with ODA
+* Support for variety of design systems
 * Light-weight
 
 ## Considered Options
@@ -22,7 +22,7 @@ We want to decide which frontend framework would be better in our case.
 
 ## Decision Outcome
 
-Chosen option: "React", because Consistent with existing ODA's implementation
+Chosen option: "React", because variety of design systems consistent with it.
 
 ## Pros and Cons of the Options
 
@@ -32,7 +32,7 @@ React is one of the famous frontend libray. It is a light weight library, and pr
 
 * Good, because It is reactive
 * Good, because it is light weight
-* Good, because consistent with ODA
+* Good, because many design systems are for React.
 * Bad, because still updates DOM by rerendering the whole component.
 
 ### VueJS
@@ -42,4 +42,4 @@ Frontend framework, which is also lighter in weight, easier to learn and easy ba
 * Good, because Reactive
 * Good, because light weight
 * Good, because easy state management
-* Bad, because Is not consistent with ODA's existing implementation
+* Bad, because limited design systems  support Vue
